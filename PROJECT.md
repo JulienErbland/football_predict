@@ -21,7 +21,7 @@ A full-stack football match prediction system that uses an ML ensemble (Poisson 
 | 9 | Odds fetcher & value bet detector | ✅ Done |
 | 10 | Prediction pipeline | ✅ Done |
 | 11 | Frontend: Next.js app on Vercel | ✅ Done |
-| 12 | GitHub Actions CI + Vercel integration | ⬜ Pending |
+| 12 | GitHub Actions CI + Vercel integration | ✅ Done |
 | 13 | Final PROJECT.md pass | ⬜ Pending |
 
 ---
@@ -68,6 +68,34 @@ cd frontend && npm install && npm run dev
 - `lru_cache` on loaders means YAML is parsed exactly once per process — no global mutable state
 - `isotonic` calibration chosen over Platt scaling because it's non-parametric and performs better on multi-class problems
 - RPS (Ranked Probability Score) chosen as secondary metric — it accounts for the ordered nature of 1X2 outcomes
+
+---
+
+## Task 12 — GitHub Actions CI + Vercel Integration
+
+### What was built
+- `.github/workflows/predict.yml` — daily prediction pipeline at 6am UTC (+ manual trigger)
+
+### CI workflow steps
+1. Checkout repo
+2. Install Python deps (`pip install -r backend/requirements.txt`)
+3. Fetch current season match data (`ingestion.football_data`)
+4. Rebuild feature table (`features.build`)
+5. Run predictions (`output.predict --matchday next`)
+6. Copy `predictions.json` → `frontend/public/data/`
+7. Commit & push → triggers Vercel auto-deploy
+
+### Required GitHub secrets
+| Secret | Description |
+|--------|-------------|
+| `FOOTBALL_DATA_API_KEY` | football-data.org API key (free tier) |
+| `THE_ODDS_API_KEY` | The Odds API key (500 req/month free tier) |
+
+### How Vercel + GitHub Actions work together
+- Vercel is connected to this repo and auto-deploys on every push to `main`
+- The daily GitHub Actions job commits updated `predictions.json` → triggers a Vercel redeploy
+- The model itself is trained **manually** (run `python -m models.train` locally, commit `.pkl` files, push)
+- Note: Vercel Cron Jobs were considered but rejected — they run Node.js/Edge runtimes; this pipeline requires Python
 
 ---
 

@@ -1,0 +1,57 @@
+name: Generate Predictions
+
+on:
+  schedule:
+    - cron: '0 6 * * *'   # every day at 6am UTC
+  workflow_dispatch:        # manual trigger from GitHub UI
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Install backend dependencies (global in CI is fine — no user code involved)
+      - name: Install Python dependencies
+        run: pip install -r backend/requirements.txt
+
+      # Fetch the latest match data for the current season only.
+      # Full historical ingestion is done manually before training.
+      - name: Fetch latest match data
+        working-directory: backend
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+        run: python -m ingestion.football_data --leagues PL,PD,BL1,SA,FL1 --seasons 2024
+
+      # Rebuild the feature table from updated match data
+      - name: Build features
+        working-directory: backend
+        run: python -m features.build
+
+      # Run predictions (requires trained models already committed to the repo)
+      - name: Generate predictions
+        working-directory: backend
+        env:
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
+          THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+        run: python -m output.predict --matchday next
+
+      # Copy fresh predictions to the frontend static directory
+      - name: Copy predictions to frontend
+        run: cp backend/data/output/predictions.json frontend/public/data/predictions.json
+
+      # Commit and push — Vercel auto-deploys on push to main, triggering a redeploy
+      # with the new predictions.json baked into the static build.
+      # Note: date is a trusted shell command, not user-controlled input.
+      - name: Commit and push updated predictions
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add frontend/public/data/predictions.json
+          git commit -m "chore: update predictions $(date -u +%Y-%m-%d)" || echo "No changes to commit"
+          git push
