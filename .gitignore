@@ -1,0 +1,44 @@
+# Environment
+.env
+.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+
+# Data (raw and processed are excluded; output/json is included)
+backend/data/raw/
+backend/data/processed/
+backend/data/features/
+backend/data/models/
+
+# Model binaries
+*.pkl
+*.joblib
+
+# But include predictions output JSON
+!backend/data/output/*.json
+!frontend/public/data/*.json
+
+# Node
+node_modules/
+.npm
+
+# Next.js
+frontend/.next/
+frontend/out/
+frontend/.vercel/
+
+# Misc
+.DS_Store
+*.log
+.idea/
+.vscode/
