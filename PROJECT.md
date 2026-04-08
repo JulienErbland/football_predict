@@ -11,7 +11,7 @@ A full-stack football match prediction system that uses an ML ensemble (Poisson 
 | Task | Description | Status |
 |------|-------------|--------|
 | 1 | Repo & environment setup | ✅ Done |
-| 2 | Backend config system | ⬜ Pending |
+| 2 | Backend config system | ✅ Done |
 | 3 | Data ingestion: football-data.org | ⬜ Pending |
 | 4 | Data ingestion: StatsBomb | ⬜ Pending |
 | 5 | Data ingestion: Transfermarkt | ⬜ Pending |
@@ -52,6 +52,22 @@ cd frontend && npm install && npm run dev
 ### Known limitations / TODOs
 - No ML code yet — tasks 2–10 pending
 - Frontend is scaffolded but has no content yet
+
+---
+
+## Task 2 — Backend Config System
+
+### What was built
+- `backend/config/settings.yaml` — leagues, seasons, bookmakers, API key placeholders, data paths
+- `backend/config/feature_config.yaml` — toggleable feature groups (form, xG, squad, tactics, context, H2H, Elo) with per-group windows and parameters
+- `backend/config/model_config.yaml` — model weights, hyperparameters, ensemble method, calibration strategy, evaluation metrics
+- `backend/config/loader.py` — resolves `${ENV_VAR}` placeholders from `.env`, exposes `settings()`, `feature_config()`, `model_config()` as `lru_cache` singletons
+
+### Key decisions
+- `${ENV_VAR}` pattern in YAML keeps API keys out of source control while still having a single readable config file
+- `lru_cache` on loaders means YAML is parsed exactly once per process — no global mutable state
+- `isotonic` calibration chosen over Platt scaling because it's non-parametric and performs better on multi-class problems
+- RPS (Ranked Probability Score) chosen as secondary metric — it accounts for the ordered nature of 1X2 outcomes
 
 ---
 

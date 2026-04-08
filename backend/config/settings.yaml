@@ -1,0 +1,26 @@
+api_keys:
+  football_data: "${FOOTBALL_DATA_API_KEY}"
+  the_odds_api:  "${THE_ODDS_API_KEY}"
+
+leagues:
+  - { code: PL,  name: Premier League,  country: England }
+  - { code: PD,  name: La Liga,         country: Spain   }
+  - { code: BL1, name: Bundesliga,      country: Germany }
+  - { code: SA,  name: Serie A,         country: Italy   }
+  - { code: FL1, name: Ligue 1,         country: France  }
+
+statsbomb_competitions: [2, 11, 72]
+
+seasons:
+  historical: [2020, 2021, 2022, 2023, 2024]
+  current: 2024
+
+bookmakers: [betclic, bet365, pinnacle, unibet, winamax]
+markets: [h2h, totals]
+
+paths:
+  raw:       backend/data/raw
+  processed: backend/data/processed
+  features:  backend/data/features/features.parquet
+  models:    backend/data/models
+  output:    backend/data/output

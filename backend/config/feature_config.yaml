@@ -1,0 +1,40 @@
+# Feature group toggles — set enabled: false to skip a group entirely.
+# All rolling features use shift(1) before rolling to prevent leakage.
+
+form:
+  enabled: true
+  windows: [3, 5, 10]
+  # Rolling stats: win/draw/loss rate, PPG, goals for/against, clean sheets, home/away split
+
+xg:
+  enabled: true
+  windows: [5, 10]
+  # xG for/against, shot quality, PPDA (pressing intensity)
+  # Falls back gracefully if StatsBomb data is unavailable
+
+squad:
+  enabled: true
+  # Squad market value (€M), avg age, injury count from Transfermarkt
+  # Falls back gracefully if Transfermarkt data is unavailable
+
+tactics:
+  enabled: true
+  # Formation encoding, formation matchup win rates, player archetype advantages
+  # (pace, aerial, technical) derived from positional lineups
+  # Falls back gracefully if lineup data is unavailable
+
+context:
+  enabled: true
+  # Rest days, fixture congestion, season stage (0→1), league position,
+  # relegation/title pressure flags, referee encoding
+
+head_to_head:
+  enabled: true
+  window_years: 5
+  # H2H win/draw/loss rates and avg goals over last 5 years
+
+elo:
+  enabled: true
+  k: 32
+  initial_rating: 1500
+  # Running Elo, Elo difference, Elo-implied home win probability

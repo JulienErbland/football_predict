@@ -1,0 +1,52 @@
+models:
+  poisson:
+    enabled: true
+    weight: 0.25
+    # Dixon-Coles Poisson regression — strong baseline, especially in low-data regimes
+
+  xgboost:
+    enabled: true
+    weight: 0.45
+    objective: "multi:softprob"
+    num_class: 3
+    early_stopping_rounds: 50
+    n_estimators: 500
+    learning_rate: 0.05
+    max_depth: 6
+    subsample: 0.8
+    colsample_bytree: 0.8
+
+  lightgbm:
+    enabled: true
+    weight: 0.20
+    objective: "multiclass"
+    num_class: 3
+    n_estimators: 500
+    learning_rate: 0.05
+    num_leaves: 63
+    feature_fraction: 0.8
+
+  neural_net:
+    enabled: false          # Only activate when dataset > 2000 matches
+    weight: 0.10
+    hidden_sizes: [256, 128, 64]
+    dropout: 0.3
+    epochs: 100
+    batch_size: 64
+    learning_rate: 0.001
+
+ensemble:
+  method: weighted_average  # or "stacking" for logistic meta-learner on OOF preds
+  # Weights are normalised to sum to 1 using only enabled models
+
+calibration:
+  method: isotonic          # Isotonic regression chosen over Platt scaling because
+  cv_folds: 5               # it's non-parametric and outperforms Platt on multi-class.
+  # Calibrate per-model before ensembling for best probability reliability.
+
+evaluation:
+  test_seasons: [2024]      # Time-based split: train on pre-2024, test on 2024
+  metrics:
+    primary: brier_score    # MSE of probabilities — penalises confident wrong preds
+    secondary: [log_loss, rps, accuracy]
+    # RPS (Ranked Probability Score) is best for ordered outcomes like 1X2
