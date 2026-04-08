@@ -18,7 +18,7 @@ A full-stack football match prediction system that uses an ML ensemble (Poisson 
 | 6 | Feature engineering | ✅ Done |
 | 7 | Models | ✅ Done |
 | 8 | Evaluation | ✅ Done |
-| 9 | Odds fetcher & value bet detector | ⬜ Pending |
+| 9 | Odds fetcher & value bet detector | ✅ Done |
 | 10 | Prediction pipeline | ⬜ Pending |
 | 11 | Frontend: Next.js app on Vercel | ⬜ Pending |
 | 12 | GitHub Actions CI + Vercel integration | ⬜ Pending |
