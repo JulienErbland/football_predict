@@ -14,7 +14,7 @@ A full-stack football match prediction system that uses an ML ensemble (Poisson 
 | 2 | Backend config system | ✅ Done |
 | 3 | Data ingestion: football-data.org | ✅ Done |
 | 4 | Data ingestion: StatsBomb | ✅ Done |
-| 5 | Data ingestion: Transfermarkt | ⬜ Pending |
+| 5 | Data ingestion: Transfermarkt | ✅ Done |
 | 6 | Feature engineering | ⬜ Pending |
 | 7 | Models | ⬜ Pending |
 | 8 | Evaluation | ⬜ Pending |
