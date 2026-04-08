@@ -1,0 +1,148 @@
+{
+  "generated_at": "2026-04-08T06:00:00Z",
+  "matches": [
+    {
+      "match_id": 101,
+      "league": "Premier League",
+      "date": "2026-04-12",
+      "home_team": "Arsenal",
+      "away_team": "Chelsea",
+      "prediction": {
+        "home_win": 0.52,
+        "draw": 0.26,
+        "away_win": 0.22,
+        "predicted_outcome": "home_win",
+        "confidence": "medium"
+      },
+      "odds_comparison": [
+        {
+          "bookmaker": "betclic",
+          "home_odds": 1.85,
+          "draw_odds": 3.5,
+          "away_odds": 4.2,
+          "home_implied": 0.541,
+          "draw_implied": 0.286,
+          "away_implied": 0.238,
+          "home_edge": -0.021,
+          "draw_edge": -0.026,
+          "away_edge": -0.018
+        },
+        {
+          "bookmaker": "pinnacle",
+          "home_odds": 2.1,
+          "draw_odds": 3.4,
+          "away_odds": 4.0,
+          "home_implied": 0.476,
+          "draw_implied": 0.294,
+          "away_implied": 0.25,
+          "home_edge": 0.044,
+          "draw_edge": -0.034,
+          "away_edge": -0.03
+        }
+      ],
+      "value_bets": [
+        {
+          "bookmaker": "pinnacle",
+          "outcome": "home_win",
+          "model_prob": 0.52,
+          "bookmaker_odds": 2.1,
+          "implied_prob": 0.476,
+          "edge": 0.044,
+          "kelly": 0.083,
+          "confidence_tier": "low"
+        }
+      ]
+    },
+    {
+      "match_id": 102,
+      "league": "La Liga",
+      "date": "2026-04-13",
+      "home_team": "Real Madrid",
+      "away_team": "Atletico Madrid",
+      "prediction": {
+        "home_win": 0.63,
+        "draw": 0.22,
+        "away_win": 0.15,
+        "predicted_outcome": "home_win",
+        "confidence": "high"
+      },
+      "odds_comparison": [
+        {
+          "bookmaker": "bet365",
+          "home_odds": 1.7,
+          "draw_odds": 3.8,
+          "away_odds": 5.5,
+          "home_implied": 0.588,
+          "draw_implied": 0.263,
+          "away_implied": 0.182,
+          "home_edge": 0.042,
+          "draw_edge": -0.043,
+          "away_edge": -0.032
+        },
+        {
+          "bookmaker": "pinnacle",
+          "home_odds": 1.75,
+          "draw_odds": 3.7,
+          "away_odds": 5.2,
+          "home_implied": 0.571,
+          "draw_implied": 0.27,
+          "away_implied": 0.192,
+          "home_edge": 0.059,
+          "draw_edge": -0.05,
+          "away_edge": -0.042
+        }
+      ],
+      "value_bets": [
+        {
+          "bookmaker": "bet365",
+          "outcome": "home_win",
+          "model_prob": 0.63,
+          "bookmaker_odds": 1.7,
+          "implied_prob": 0.588,
+          "edge": 0.042,
+          "kelly": 0.061,
+          "confidence_tier": "low"
+        },
+        {
+          "bookmaker": "pinnacle",
+          "outcome": "home_win",
+          "model_prob": 0.63,
+          "bookmaker_odds": 1.75,
+          "implied_prob": 0.571,
+          "edge": 0.059,
+          "kelly": 0.093,
+          "confidence_tier": "medium"
+        }
+      ]
+    },
+    {
+      "match_id": 103,
+      "league": "Bundesliga",
+      "date": "2026-04-12",
+      "home_team": "Bayer Leverkusen",
+      "away_team": "Bayern Munich",
+      "prediction": {
+        "home_win": 0.38,
+        "draw": 0.28,
+        "away_win": 0.34,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [
+        {
+          "bookmaker": "unibet",
+          "home_odds": 2.9,
+          "draw_odds": 3.3,
+          "away_odds": 2.5,
+          "home_implied": 0.345,
+          "draw_implied": 0.303,
+          "away_implied": 0.4,
+          "home_edge": 0.035,
+          "draw_edge": -0.023,
+          "away_edge": -0.06
+        }
+      ],
+      "value_bets": []
+    }
+  ]
+}
