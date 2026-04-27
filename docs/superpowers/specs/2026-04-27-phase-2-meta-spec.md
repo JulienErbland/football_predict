@@ -103,6 +103,18 @@ After CV-based selection, retrain on full 2021–2023 corpus and evaluate on
 | **Ambiguous** | One condition met, other not |
 | **Regression** | Either metric degrades beyond noise threshold |
 
+**Merge implications**:
+
+- **"Real"** or **"Ambiguous"** verdicts → ticket MAY merge (no degradation
+  detected).
+- **"Regression"** verdict → ticket BLOCKS merge per §1 quality gate protocol.
+
+Rationale: an "Ambiguous" verdict means the improvement is hard to attribute
+between CV and holdout signals, but there's no measurable harm. A ticket that
+lands without measurable improvement is not a problem in itself — Phase 2 has
+5 tickets, and we expect cumulative gains, not per-ticket gains. The hard
+rule is: don't ship regressions.
+
 **Strengths of this combination**:
 
 - Within-season CV: statistical power for ticket-level decisions (n=9 vs n=2).
