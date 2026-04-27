@@ -57,12 +57,16 @@ class XGBoostModel(BaseModel):
         feature_names = kwargs.get("feature_names")
         early_stopping_rounds = kwargs.get("early_stopping_rounds", 50)
 
-        self._model = xgb.XGBClassifier(**self._params)
-        fit_kwargs: dict = {}
+        # XGBoost 2.x: early_stopping_rounds was a fit() arg.
+        # XGBoost 3.x: it must be set on the constructor instead.
+        params = {**self._params}
+        if X_val is not None and y_val is not None:
+            params["early_stopping_rounds"] = early_stopping_rounds
+
+        self._model = xgb.XGBClassifier(**params)
+        fit_kwargs: dict = {"verbose": False}
         if X_val is not None and y_val is not None:
             fit_kwargs["eval_set"] = [(X_val, y_val)]
-            fit_kwargs["early_stopping_rounds"] = early_stopping_rounds
-            fit_kwargs["verbose"] = False
 
         self._model.fit(X, y, **fit_kwargs)
         self.feature_importances_ = self._model.feature_importances_

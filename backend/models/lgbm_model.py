@@ -79,6 +79,9 @@ class LGBMModel(BaseModel):
     def predict_proba(self, X: np.ndarray) -> np.ndarray:
         if self._model is None:
             raise RuntimeError("Model not trained — call fit() first.")
+        if self.feature_names_ is not None and not hasattr(X, "columns"):
+            import pandas as pd
+            X = pd.DataFrame(X, columns=self.feature_names_)
         return self._model.predict_proba(X)
 
     def get_feature_importance_df(self) -> "pd.DataFrame | None":

@@ -22,6 +22,7 @@ import requests
 from loguru import logger
 
 from config.loader import settings
+from ingestion.name_normalizer import normalize_columns, normalize_team
 
 # Football-data.org v4 base URL
 _BASE_URL = "https://api.football-data.org/v4"
@@ -98,6 +99,7 @@ class FootballDataClient:
         df = pd.DataFrame(rows)
         if not df.empty:
             df["date"] = pd.to_datetime(df["date"])
+            df = normalize_columns(df)
             out_path = self._raw_dir / f"{league_code}_{season}_matches.parquet"
             df.to_parquet(out_path, index=False)
             logger.info(f"Saved {len(df)} matches → {out_path}")
@@ -133,6 +135,7 @@ class FootballDataClient:
                 })
         df = pd.DataFrame(rows)
         if not df.empty:
+            df = normalize_columns(df, columns=("team",))
             out_path = self._raw_dir / f"{league_code}_{season}_standings.parquet"
             df.to_parquet(out_path, index=False)
             logger.info(f"Saved standings ({len(df)} teams) → {out_path}")
@@ -165,6 +168,7 @@ class FootballDataClient:
             })
         df = pd.DataFrame(rows)
         if not df.empty:
+            df = normalize_columns(df)
             out_path = self._raw_dir / f"{league_code}_upcoming.parquet"
             df.to_parquet(out_path, index=False)
             logger.info(f"Saved {len(df)} upcoming matches → {out_path}")

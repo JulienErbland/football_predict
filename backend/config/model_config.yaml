@@ -1,12 +1,12 @@
 models:
   poisson:
-    enabled: true
+    enabled: false   # Trained standalone but excluded from ensemble (different predict_proba interface)
     weight: 0.25
     # Dixon-Coles Poisson regression — strong baseline, especially in low-data regimes
 
   xgboost:
     enabled: true
-    weight: 0.45
+    weight: 0.60
     objective: "multi:softprob"
     num_class: 3
     early_stopping_rounds: 50
@@ -18,7 +18,7 @@ models:
 
   lightgbm:
     enabled: true
-    weight: 0.20
+    weight: 0.40
     objective: "multiclass"
     num_class: 3
     n_estimators: 500

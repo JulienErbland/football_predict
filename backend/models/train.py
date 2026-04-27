@@ -11,7 +11,10 @@ Workflow:
 
 HOW TO TRAIN THE MODEL (run these commands):
     cd backend
-    python -m ingestion.football_data --leagues PL,PD,BL1,SA,FL1 --seasons 2021,2022,2023,2024
+    # Option A — free, no API key needed (football-data.co.uk CSVs):
+    python -m ingestion.football_data_csv --leagues PL,PD,BL1,SA,FL1 --seasons 2021,2022,2023,2024
+    # Option B — football-data.org API (requires paid tier for historical seasons):
+    # python -m ingestion.football_data --leagues PL,PD,BL1,SA,FL1 --seasons 2021,2022,2023,2024
     python -m features.build
     python -m models.train
 
@@ -142,17 +145,13 @@ def train(force_retrain: bool = False) -> EnsembleModel:
             colsample_bytree=mc["models"]["xgboost"]["colsample_bytree"],
         )
 
-        # ── TRAINING PLACEHOLDER ──────────────────────────────────────────
-        # Uncomment to actually train:
-        # xgb_model.fit(X_tr, y_tr, X_val=X_val, y_val=y_val,
-        #               feature_names=feature_cols,
-        #               early_stopping_rounds=mc["models"]["xgboost"]["early_stopping_rounds"])
-        # calibrated_xgb = xgb_model.calibrate(X_val, y_val)
-        # calibrated_xgb.save(models_dir / "xgboost.pkl")
-        logger.info("XGBoost training skipped (placeholder).")
-        # ─────────────────────────────────────────────────────────────────
+        xgb_model.fit(X_tr, y_tr, X_val=X_val, y_val=y_val,
+                      feature_names=feature_cols,
+                      early_stopping_rounds=mc["models"]["xgboost"]["early_stopping_rounds"])
+        calibrated_xgb = xgb_model.calibrate(X_val, y_val)
+        calibrated_xgb.save(models_dir / "xgboost.pkl")
 
-        trained_models["xgboost"] = xgb_model
+        trained_models["xgboost"] = calibrated_xgb
         weights["xgboost"] = mc["models"]["xgboost"]["weight"]
 
     # ── LightGBM ──────────────────────────────────────────────────────────
@@ -164,16 +163,12 @@ def train(force_retrain: bool = False) -> EnsembleModel:
             num_leaves=mc["models"]["lightgbm"]["num_leaves"],
         )
 
-        # ── TRAINING PLACEHOLDER ──────────────────────────────────────────
-        # Uncomment to actually train:
-        # lgbm_model.fit(X_tr, y_tr, X_val=X_val, y_val=y_val,
-        #                feature_names=feature_cols)
-        # calibrated_lgbm = lgbm_model.calibrate(X_val, y_val)
-        # calibrated_lgbm.save(models_dir / "lightgbm.pkl")
-        logger.info("LightGBM training skipped (placeholder).")
-        # ─────────────────────────────────────────────────────────────────
+        lgbm_model.fit(X_tr, y_tr, X_val=X_val, y_val=y_val,
+                       feature_names=feature_cols)
+        calibrated_lgbm = lgbm_model.calibrate(X_val, y_val)
+        calibrated_lgbm.save(models_dir / "lightgbm.pkl")
 
-        trained_models["lightgbm"] = lgbm_model
+        trained_models["lightgbm"] = calibrated_lgbm
         weights["lightgbm"] = mc["models"]["lightgbm"]["weight"]
 
     # ── Neural Net (optional) ──────────────────────────────────────────────
@@ -205,10 +200,7 @@ def train(force_retrain: bool = False) -> EnsembleModel:
         pickle.dump(feature_cols, f, protocol=pickle.HIGHEST_PROTOCOL)
     logger.info(f"Saved feature column order → {feature_cols_path}")
 
-    logger.info(
-        "Training pipeline complete. "
-        "Uncomment fit() blocks to actually train the models."
-    )
+    logger.info("Training pipeline complete.")
     return ensemble
 
 

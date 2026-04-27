@@ -9,7 +9,7 @@ API docs: https://the-odds-api.com/lol-of-the-api/
 Endpoint used: GET /v4/sports/{sport}/odds
 
 League key mapping (The Odds API uses different codes from football-data.org):
-    PL  → soccer_england_premier_league
+    PL  → soccer_epl
     PD  → soccer_spain_la_liga
     BL1 → soccer_germany_bundesliga
     SA  → soccer_italy_serie_a
@@ -30,12 +30,13 @@ import requests
 from loguru import logger
 
 from config.loader import settings
+from ingestion.name_normalizer import normalize_columns
 
 _BASE_URL = "https://api.the-odds-api.com/v4"
 
 # Map our league codes to The Odds API sport keys
 _LEAGUE_KEYS = {
-    "PL":  "soccer_england_premier_league",
+    "PL":  "soccer_epl",
     "PD":  "soccer_spain_la_liga",
     "BL1": "soccer_germany_bundesliga",
     "SA":  "soccer_italy_serie_a",
@@ -79,7 +80,9 @@ class OddsFetcher:
         cache_path = self._raw_dir / f"odds_{league_code}_{today_str}.parquet"
         if cache_path.exists():
             logger.info(f"Cache hit — loading {cache_path}")
-            return pd.read_parquet(cache_path)
+            cached = pd.read_parquet(cache_path)
+            # Legacy cached files may predate name canonicalisation — normalise on load.
+            return normalize_columns(cached)
 
         url = f"{_BASE_URL}/sports/{sport_key}/odds"
         params = {
@@ -129,6 +132,7 @@ class OddsFetcher:
         df = pd.DataFrame(rows)
         if not df.empty:
             df["date"] = pd.to_datetime(df["date"], utc=True)
+            df = normalize_columns(df)
             df.to_parquet(cache_path, index=False)
             logger.info(f"Saved odds ({len(df)} rows) → {cache_path}")
         return df
