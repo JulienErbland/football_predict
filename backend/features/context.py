@@ -79,11 +79,34 @@ def _compute_league_positions(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def build_context_features(matches: pd.DataFrame) -> pd.DataFrame:
+_STANDING_COLS = (
+    "home_league_pos",
+    "away_league_pos",
+    "position_gap",
+    "home_relegation_pressure",
+    "away_relegation_pressure",
+    "home_title_race",
+    "away_title_race",
+)
+
+
+def build_context_features(
+    matches: pd.DataFrame,
+    standings_cache: dict[int, dict] | None = None,
+) -> pd.DataFrame:
     """
     Build all context features and return enriched DataFrame.
 
     This builder always succeeds (no external data dependencies).
+
+    `standings_cache` (T0.1c optimisation) — optional dict keyed by match_id
+    holding the seven standings-derived columns: home_league_pos,
+    away_league_pos, position_gap, home_relegation_pressure,
+    away_relegation_pressure, home_title_race, away_title_race. When supplied,
+    the slow `_compute_league_positions` call is skipped and the cached
+    columns are injected instead. Used by `output.predict` to avoid
+    rebuilding standings 50× per slate; for any cache miss the row's
+    standings columns are NaN (caller's responsibility to ensure coverage).
     """
     df = matches.sort_values("date").copy()
     df["date"] = pd.to_datetime(df["date"])
@@ -129,8 +152,24 @@ def build_context_features(matches: pd.DataFrame) -> pd.DataFrame:
     df["referee_encoded"] = df["referee"].map(ref_map).fillna(-1).astype(int)
 
     # ── League positions (expensive — computed last) ───────────────────────
-    logger.info("Computing league positions (this may take a few minutes)...")
-    df = _compute_league_positions(df)
+    if standings_cache is not None:
+        for col in _STANDING_COLS:
+            df[col] = df["match_id"].map(lambda mid, _c=col: standings_cache.get(int(mid), {}).get(_c))
+    else:
+        logger.info("Computing league positions (this may take a few minutes)...")
+        df = _compute_league_positions(df)
 
     logger.info("Built context features.")
     return df
+
+
+def extract_standings_cache(df_with_standings: pd.DataFrame) -> dict[int, dict]:
+    """
+    Extract a {match_id: {standings_col: value}} cache from a frame that
+    already has the seven standings columns populated (e.g. the output of
+    a prior `_compute_league_positions` run).
+    """
+    cache: dict[int, dict] = {}
+    for _, row in df_with_standings.iterrows():
+        cache[int(row["match_id"])] = {col: row[col] for col in _STANDING_COLS if col in row}
+    return cache
