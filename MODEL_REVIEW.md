@@ -375,6 +375,27 @@ Understat provides free match-level xG data for the top 6 European leagues going
 
 ---
 
+## 6.6 Phase 2 Non-Goals (T2.6)
+
+These directions were **explicitly considered and rejected** for Phase 2. They are
+documented here so future work — human or AI-assisted — does not re-litigate them
+mid-ticket. Each is rejected for a specific reason; do not pursue them as part of
+T2.1–T2.5 even if they look like a "while I'm here" easy win.
+
+| Non-goal | Why rejected for Phase 2 |
+|----------|--------------------------|
+| **Bivariate Poisson as a feature** | Marginal RPS gain on top of existing Elo + form + H2H + pi-ratings (T2.3). Cost of correct implementation (Dixon-Coles dependence parameter, EM fitting, calibration sanity) is high. Revisit only if Phase 4 expanded corpus shifts the cost-benefit. |
+| **Neural networks / LSTMs / Transformers** | Tabular-data literature (cf. *When Do Neural Nets Outperform Boosted Trees…*, NeurIPS 2023) shows GBTs win at our scale (~5k–10k matches). Boosted trees + stacking (T2.5) is where the marginal RPS lives. NN revisit gated on >2k-match dataset growth, already documented in `model_config.yaml`. |
+| **Player embeddings** | Requires reliable lineup data (currently absent — see §2.10) and a much larger corpus to learn meaningful embeddings without overfitting. Phase 4+ ingestion work, not Phase 2. |
+| **Bayesian hierarchical models** | High implementation cost (Stan/PyMC), slow inference, no clear RPS ceiling advantage over GBTs at this scale. Useful for *interpretability* of latent strength parameters — out of scope for the quality-upgrade phase. |
+| **Fixing the disabled Dixon-Coles Poisson** | The placeholder Poisson model in `backend/models/poisson_model.py` is currently disabled (`enabled: false` in `model_config.yaml`) and not in the ensemble. Reactivating it requires reconciling its `predict_proba` interface with the calibrated GBT pipeline — net negative ROI when CatBoost (T2.4) is filling the "third base model" slot. Leave disabled. |
+
+If a Phase 2 implementation step starts drifting toward any of these, **stop and
+flag scope creep** rather than implementing. The expected behaviour during
+T2.3-T2.5 is to point at this section instead of debating the non-goal again.
+
+---
+
 ## 7. Sources
 
 - [A predictive analytics framework for soccer match outcome forecasting (ScienceDirect, 2024)](https://www.sciencedirect.com/science/article/pii/S2772662224001413)
