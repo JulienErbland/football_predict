@@ -1,2549 +1,885 @@
 {
-  "generated_at": "2026-04-08T17:13:59.471272+00:00",
+  "generated_at": "2026-04-09T20:23:12.845571+00:00",
   "matches": [
     {
-      "match_id": 10404,
-      "league": "Saudi Pro League",
-      "date": "2026-04-08",
-      "home_team": "Al-Fayha",
-      "away_team": "Al-Ahli",
+      "match_id": 538104,
+      "league": "Premier League",
+      "date": "2026-04-10",
+      "home_team": "West Ham United FC",
+      "away_team": "Wolverhampton Wanderers FC",
       "prediction": {
-        "home_win": 0.557,
-        "draw": 0.325,
-        "away_win": 0.118,
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
         "predicted_outcome": "home_win",
-        "confidence": "medium"
+        "confidence": "low"
       },
-      "odds_comparison": [
-        {
-          "bookmaker": "betclic_fr",
-          "home_odds": 1.88,
-          "draw_odds": 2.45,
-          "away_odds": 5.25,
-          "home_implied": 0.47,
-          "draw_implied": 0.361,
-          "away_implied": 0.168,
-          "home_edge": 0.087,
-          "draw_edge": -0.036,
-          "away_edge": -0.05
-        },
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 1.99,
-          "draw_odds": 2.42,
-          "away_odds": 8.2,
-          "home_implied": 0.484,
-          "draw_implied": 0.398,
-          "away_implied": 0.118,
-          "home_edge": 0.073,
-          "draw_edge": -0.073,
-          "away_edge": 0.001
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 1.76,
-          "draw_odds": 2.63,
-          "away_odds": 6.25,
-          "home_implied": 0.513,
-          "draw_implied": 0.343,
-          "away_implied": 0.144,
-          "home_edge": 0.045,
-          "draw_edge": -0.018,
-          "away_edge": -0.026
-        },
-        {
-          "bookmaker": "pinnacle",
-          "home_odds": 1.16,
-          "draw_odds": 6.44,
-          "away_odds": 22.24,
-          "home_implied": 0.812,
-          "draw_implied": 0.146,
-          "away_implied": 0.042,
-          "home_edge": -0.254,
-          "draw_edge": 0.179,
-          "away_edge": 0.076
-        },
-        {
-          "bookmaker": "pmu_fr",
-          "home_odds": 1.66,
-          "draw_odds": 2.48,
-          "away_odds": 6.0,
-          "home_implied": 0.514,
-          "draw_implied": 0.344,
-          "away_implied": 0.142,
-          "home_edge": 0.043,
-          "draw_edge": -0.019,
-          "away_edge": -0.024
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 1.91,
-          "draw_odds": 2.3,
-          "away_odds": 5.0,
-          "home_implied": 0.452,
-          "draw_implied": 0.375,
-          "away_implied": 0.173,
-          "home_edge": 0.105,
-          "draw_edge": -0.051,
-          "away_edge": -0.055
-        },
-        {
-          "bookmaker": "tipico_de",
-          "home_odds": 1.85,
-          "draw_odds": 2.5,
-          "away_odds": 6.5,
-          "home_implied": 0.494,
-          "draw_implied": 0.366,
-          "away_implied": 0.141,
-          "home_edge": 0.063,
-          "draw_edge": -0.041,
-          "away_edge": -0.022
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "home_odds": 1.78,
-          "draw_odds": 2.65,
-          "away_odds": 6.4,
-          "home_implied": 0.513,
-          "draw_implied": 0.344,
-          "away_implied": 0.143,
-          "home_edge": 0.044,
-          "draw_edge": -0.02,
-          "away_edge": -0.025
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 1.82,
-          "draw_odds": 2.7,
-          "away_odds": 6.5,
-          "home_implied": 0.512,
-          "draw_implied": 0.345,
-          "away_implied": 0.143,
-          "home_edge": 0.045,
-          "draw_edge": -0.02,
-          "away_edge": -0.025
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 1.88,
-          "draw_odds": 2.5,
-          "away_odds": 5.6,
-          "home_implied": 0.479,
-          "draw_implied": 0.36,
-          "away_implied": 0.161,
-          "home_edge": 0.078,
-          "draw_edge": -0.035,
-          "away_edge": -0.043
-        },
-        {
-          "bookmaker": "winamax_fr",
-          "home_odds": 1.84,
-          "draw_odds": 2.35,
-          "away_odds": 5.0,
-          "home_implied": 0.465,
-          "draw_implied": 0.364,
-          "away_implied": 0.171,
-          "home_edge": 0.092,
-          "draw_edge": -0.039,
-          "away_edge": -0.053
-        }
-      ],
-      "value_bets": [
-        {
-          "bookmaker": "betclic_fr",
-          "outcome": "home_win",
-          "model_prob": 0.557,
-          "bookmaker_odds": 1.88,
-          "implied_prob": 0.47,
-          "edge": 0.087,
-          "kelly": 0.185,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "betfair_ex_eu",
-          "outcome": "home_win",
-          "model_prob": 0.557,
-          "bookmaker_odds": 1.99,
-          "implied_prob": 0.484,
-          "edge": 0.073,
-          "kelly": 0.147,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "pinnacle",
-          "outcome": "draw",
-          "model_prob": 0.325,
-          "bookmaker_odds": 6.44,
-          "implied_prob": 0.146,
-          "edge": 0.179,
-          "kelly": 0.211,
-          "confidence_tier": "high"
-        },
-        {
-          "bookmaker": "pinnacle",
-          "outcome": "away_win",
-          "model_prob": 0.118,
-          "bookmaker_odds": 22.24,
-          "implied_prob": 0.042,
-          "edge": 0.076,
-          "kelly": 0.079,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "sport888",
-          "outcome": "home_win",
-          "model_prob": 0.557,
-          "bookmaker_odds": 1.91,
-          "implied_prob": 0.452,
-          "edge": 0.105,
-          "kelly": 0.221,
-          "confidence_tier": "high"
-        },
-        {
-          "bookmaker": "tipico_de",
-          "outcome": "home_win",
-          "model_prob": 0.557,
-          "bookmaker_odds": 1.85,
-          "implied_prob": 0.494,
-          "edge": 0.063,
-          "kelly": 0.138,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "winamax_de",
-          "outcome": "home_win",
-          "model_prob": 0.557,
-          "bookmaker_odds": 1.88,
-          "implied_prob": 0.479,
-          "edge": 0.078,
-          "kelly": 0.167,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "winamax_fr",
-          "outcome": "home_win",
-          "model_prob": 0.557,
-          "bookmaker_odds": 1.84,
-          "implied_prob": 0.465,
-          "edge": 0.092,
-          "kelly": 0.202,
-          "confidence_tier": "medium"
-        }
-      ]
-    },
-    {
-      "match_id": 84942,
-      "league": "Super League Greece",
-      "date": "2026-04-08",
-      "home_team": "Atromitos Athens",
-      "away_team": "AE Kifisia FC",
-      "prediction": {
-        "home_win": 0.23,
-        "draw": 0.469,
-        "away_win": 0.3,
-        "predicted_outcome": "draw",
-        "confidence": "medium"
-      },
-      "odds_comparison": [
-        {
-          "bookmaker": "betclic_fr",
-          "home_odds": 3.27,
-          "draw_odds": 1.97,
-          "away_odds": 3.12,
-          "home_implied": 0.27,
-          "draw_implied": 0.448,
-          "away_implied": 0.283,
-          "home_edge": -0.04,
-          "draw_edge": 0.022,
-          "away_edge": 0.018
-        },
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 3.9,
-          "draw_odds": 2.16,
-          "away_odds": 3.45,
-          "home_implied": 0.254,
-          "draw_implied": 0.459,
-          "away_implied": 0.287,
-          "home_edge": -0.024,
-          "draw_edge": 0.011,
-          "away_edge": 0.013
-        },
-        {
-          "bookmaker": "betsson",
-          "home_odds": 3.45,
-          "draw_odds": 1.99,
-          "away_odds": 3.45,
-          "home_implied": 0.268,
-          "draw_implied": 0.464,
-          "away_implied": 0.268,
-          "home_edge": -0.038,
-          "draw_edge": 0.005,
-          "away_edge": 0.033
-        },
-        {
-          "bookmaker": "coolbet",
-          "home_odds": 3.5,
-          "draw_odds": 2.0,
-          "away_odds": 3.5,
-          "home_implied": 0.267,
-          "draw_implied": 0.467,
-          "away_implied": 0.267,
-          "home_edge": -0.037,
-          "draw_edge": 0.003,
-          "away_edge": 0.034
-        },
-        {
-          "bookmaker": "nordicbet",
-          "home_odds": 3.45,
-          "draw_odds": 1.99,
-          "away_odds": 3.45,
-          "home_implied": 0.268,
-          "draw_implied": 0.464,
-          "away_implied": 0.268,
-          "home_edge": -0.038,
-          "draw_edge": 0.005,
-          "away_edge": 0.033
-        },
-        {
-          "bookmaker": "pinnacle",
-          "home_odds": 3.58,
-          "draw_odds": 2.06,
-          "away_odds": 3.31,
-          "home_implied": 0.262,
-          "draw_implied": 0.455,
-          "away_implied": 0.283,
-          "home_edge": -0.032,
-          "draw_edge": 0.014,
-          "away_edge": 0.017
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 3.5,
-          "draw_odds": 2.0,
-          "away_odds": 3.1,
-          "home_implied": 0.258,
-          "draw_implied": 0.451,
-          "away_implied": 0.291,
-          "home_edge": -0.028,
-          "draw_edge": 0.018,
-          "away_edge": 0.009
-        },
-        {
-          "bookmaker": "suprabets",
-          "home_odds": 3.6,
-          "draw_odds": 2.18,
-          "away_odds": 3.05,
-          "home_implied": 0.261,
-          "draw_implied": 0.431,
-          "away_implied": 0.308,
-          "home_edge": -0.031,
-          "draw_edge": 0.038,
-          "away_edge": -0.008
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 3.4,
-          "draw_odds": 1.96,
-          "away_odds": 3.3,
-          "home_implied": 0.266,
-          "draw_implied": 0.461,
-          "away_implied": 0.274,
-          "home_edge": -0.035,
-          "draw_edge": 0.009,
-          "away_edge": 0.027
-        },
-        {
-          "bookmaker": "winamax_fr",
-          "home_odds": 3.3,
-          "draw_odds": 1.9,
-          "away_odds": 3.25,
-          "home_implied": 0.267,
-          "draw_implied": 0.463,
-          "away_implied": 0.271,
-          "home_edge": -0.036,
-          "draw_edge": 0.007,
-          "away_edge": 0.03
-        }
-      ],
+      "odds_comparison": [],
       "value_bets": []
     },
     {
-      "match_id": 45837,
-      "league": "UEFA Europa League",
-      "date": "2026-04-08",
-      "home_team": "SC Braga",
-      "away_team": "Real Betis",
+      "match_id": 538097,
+      "league": "Premier League",
+      "date": "2026-04-11",
+      "home_team": "Arsenal FC",
+      "away_team": "AFC Bournemouth",
       "prediction": {
-        "home_win": 0.168,
-        "draw": 0.212,
-        "away_win": 0.619,
-        "predicted_outcome": "away_win",
-        "confidence": "high"
-      },
-      "odds_comparison": [
-        {
-          "bookmaker": "betclic_fr",
-          "home_odds": 8.0,
-          "draw_odds": 3.75,
-          "away_odds": 1.47,
-          "home_implied": 0.117,
-          "draw_implied": 0.249,
-          "away_implied": 0.635,
-          "home_edge": 0.052,
-          "draw_edge": -0.037,
-          "away_edge": -0.015
-        },
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 9.2,
-          "draw_odds": 4.4,
-          "away_odds": 1.49,
-          "home_implied": 0.108,
-          "draw_implied": 0.226,
-          "away_implied": 0.666,
-          "home_edge": 0.06,
-          "draw_edge": -0.013,
-          "away_edge": -0.047
-        },
-        {
-          "bookmaker": "coolbet",
-          "home_odds": 8.25,
-          "draw_odds": 4.1,
-          "away_odds": 1.5,
-          "home_implied": 0.117,
-          "draw_implied": 0.236,
-          "away_implied": 0.646,
-          "home_edge": 0.051,
-          "draw_edge": -0.024,
-          "away_edge": -0.027
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 7.5,
-          "draw_odds": 3.85,
-          "away_odds": 1.45,
-          "home_implied": 0.123,
-          "draw_implied": 0.24,
-          "away_implied": 0.637,
-          "home_edge": 0.045,
-          "draw_edge": -0.028,
-          "away_edge": -0.017
-        },
-        {
-          "bookmaker": "matchbook",
-          "home_odds": 9.4,
-          "draw_odds": 4.3,
-          "away_odds": 1.49,
-          "home_implied": 0.105,
-          "draw_implied": 0.23,
-          "away_implied": 0.664,
-          "home_edge": 0.063,
-          "draw_edge": -0.018,
-          "away_edge": -0.045
-        },
-        {
-          "bookmaker": "nordicbet",
-          "home_odds": 7.2,
-          "draw_odds": 3.9,
-          "away_odds": 1.45,
-          "home_implied": 0.128,
-          "draw_implied": 0.236,
-          "away_implied": 0.636,
-          "home_edge": 0.04,
-          "draw_edge": -0.024,
-          "away_edge": -0.016
-        },
-        {
-          "bookmaker": "pinnacle",
-          "home_odds": 6.78,
-          "draw_odds": 3.71,
-          "away_odds": 1.54,
-          "home_implied": 0.138,
-          "draw_implied": 0.253,
-          "away_implied": 0.609,
-          "home_edge": 0.03,
-          "draw_edge": -0.041,
-          "away_edge": 0.011
-        },
-        {
-          "bookmaker": "pmu_fr",
-          "home_odds": 7.5,
-          "draw_odds": 3.8,
-          "away_odds": 1.43,
-          "home_implied": 0.122,
-          "draw_implied": 0.24,
-          "away_implied": 0.638,
-          "home_edge": 0.047,
-          "draw_edge": -0.028,
-          "away_edge": -0.019
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 6.5,
-          "draw_odds": 3.75,
-          "away_odds": 1.5,
-          "home_implied": 0.142,
-          "draw_implied": 0.245,
-          "away_implied": 0.613,
-          "home_edge": 0.027,
-          "draw_edge": -0.033,
-          "away_edge": 0.006
-        },
-        {
-          "bookmaker": "suprabets",
-          "home_odds": 7.2,
-          "draw_odds": 4.0,
-          "away_odds": 1.5,
-          "home_implied": 0.132,
-          "draw_implied": 0.237,
-          "away_implied": 0.632,
-          "home_edge": 0.037,
-          "draw_edge": -0.025,
-          "away_edge": -0.012
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "home_odds": 8.0,
-          "draw_odds": 3.85,
-          "away_odds": 1.45,
-          "home_implied": 0.116,
-          "draw_implied": 0.242,
-          "away_implied": 0.642,
-          "home_edge": 0.052,
-          "draw_edge": -0.03,
-          "away_edge": -0.022
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 7.5,
-          "draw_odds": 3.85,
-          "away_odds": 1.45,
-          "home_implied": 0.123,
-          "draw_implied": 0.24,
-          "away_implied": 0.637,
-          "home_edge": 0.045,
-          "draw_edge": -0.028,
-          "away_edge": -0.017
-        },
-        {
-          "bookmaker": "winamax_fr",
-          "home_odds": 6.75,
-          "draw_odds": 3.7,
-          "away_odds": 1.44,
-          "home_implied": 0.133,
-          "draw_implied": 0.243,
-          "away_implied": 0.624,
-          "home_edge": 0.035,
-          "draw_edge": -0.031,
-          "away_edge": -0.005
-        }
-      ],
-      "value_bets": [
-        {
-          "bookmaker": "betclic_fr",
-          "outcome": "home_win",
-          "model_prob": 0.168,
-          "bookmaker_odds": 8.0,
-          "implied_prob": 0.117,
-          "edge": 0.052,
-          "kelly": 0.059,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "betfair_ex_eu",
-          "outcome": "home_win",
-          "model_prob": 0.168,
-          "bookmaker_odds": 9.2,
-          "implied_prob": 0.108,
-          "edge": 0.06,
-          "kelly": 0.068,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "coolbet",
-          "outcome": "home_win",
-          "model_prob": 0.168,
-          "bookmaker_odds": 8.25,
-          "implied_prob": 0.117,
-          "edge": 0.051,
-          "kelly": 0.058,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "matchbook",
-          "outcome": "home_win",
-          "model_prob": 0.168,
-          "bookmaker_odds": 9.4,
-          "implied_prob": 0.105,
-          "edge": 0.063,
-          "kelly": 0.07,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "outcome": "home_win",
-          "model_prob": 0.168,
-          "bookmaker_odds": 8.0,
-          "implied_prob": 0.116,
-          "edge": 0.052,
-          "kelly": 0.059,
-          "confidence_tier": "low"
-        }
-      ]
-    },
-    {
-      "match_id": 2358,
-      "league": "S\u00fcper Lig",
-      "date": "2026-04-08",
-      "home_team": "Goztepe",
-      "away_team": "Galatasaray",
-      "prediction": {
-        "home_win": 0.629,
-        "draw": 0.213,
-        "away_win": 0.158,
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
         "predicted_outcome": "home_win",
-        "confidence": "high"
+        "confidence": "low"
       },
-      "odds_comparison": [
-        {
-          "bookmaker": "betclic_fr",
-          "home_odds": 1.26,
-          "draw_odds": 4.6,
-          "away_odds": 8.0,
-          "home_implied": 0.699,
-          "draw_implied": 0.191,
-          "away_implied": 0.11,
-          "home_edge": -0.07,
-          "draw_edge": 0.021,
-          "away_edge": 0.048
-        },
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 1.82,
-          "draw_odds": 3.75,
-          "away_odds": 5.4,
-          "home_implied": 0.549,
-          "draw_implied": 0.266,
-          "away_implied": 0.185,
-          "home_edge": 0.08,
-          "draw_edge": -0.054,
-          "away_edge": -0.027
-        },
-        {
-          "bookmaker": "betonlineag",
-          "home_odds": 1.75,
-          "draw_odds": 3.5,
-          "away_odds": 4.3,
-          "home_implied": 0.524,
-          "draw_implied": 0.262,
-          "away_implied": 0.213,
-          "home_edge": 0.105,
-          "draw_edge": -0.05,
-          "away_edge": -0.055
-        },
-        {
-          "bookmaker": "betsson",
-          "home_odds": 1.23,
-          "draw_odds": 5.8,
-          "away_odds": 9.6,
-          "home_implied": 0.746,
-          "draw_implied": 0.158,
-          "away_implied": 0.096,
-          "home_edge": -0.117,
-          "draw_edge": 0.054,
-          "away_edge": 0.063
-        },
-        {
-          "bookmaker": "codere_it",
-          "home_odds": 1.8,
-          "draw_odds": 3.6,
-          "away_odds": 4.4,
-          "home_implied": 0.524,
-          "draw_implied": 0.262,
-          "away_implied": 0.214,
-          "home_edge": 0.105,
-          "draw_edge": -0.049,
-          "away_edge": -0.056
-        },
-        {
-          "bookmaker": "coolbet",
-          "home_odds": 1.36,
-          "draw_odds": 5.5,
-          "away_odds": 8.5,
-          "home_implied": 0.711,
-          "draw_implied": 0.176,
-          "away_implied": 0.114,
-          "home_edge": -0.082,
-          "draw_edge": 0.037,
-          "away_edge": 0.045
-        },
-        {
-          "bookmaker": "everygame",
-          "home_odds": 1.75,
-          "draw_odds": 3.5,
-          "away_odds": 4.6,
-          "home_implied": 0.532,
-          "draw_implied": 0.266,
-          "away_implied": 0.202,
-          "home_edge": 0.097,
-          "draw_edge": -0.053,
-          "away_edge": -0.044
-        },
-        {
-          "bookmaker": "gtbets",
-          "home_odds": 1.78,
-          "draw_odds": 3.53,
-          "away_odds": 4.46,
-          "home_implied": 0.525,
-          "draw_implied": 0.265,
-          "away_implied": 0.21,
-          "home_edge": 0.104,
-          "draw_edge": -0.052,
-          "away_edge": -0.051
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 1.23,
-          "draw_odds": 4.8,
-          "away_odds": 9.0,
-          "home_implied": 0.718,
-          "draw_implied": 0.184,
-          "away_implied": 0.098,
-          "home_edge": -0.089,
-          "draw_edge": 0.029,
-          "away_edge": 0.06
-        },
-        {
-          "bookmaker": "marathonbet",
-          "home_odds": 1.75,
-          "draw_odds": 3.6,
-          "away_odds": 4.5,
-          "home_implied": 0.533,
-          "draw_implied": 0.259,
-          "away_implied": 0.207,
-          "home_edge": 0.096,
-          "draw_edge": -0.047,
-          "away_edge": -0.049
-        },
-        {
-          "bookmaker": "matchbook",
-          "home_odds": 1.37,
-          "draw_odds": 5.3,
-          "away_odds": 10.0,
-          "home_implied": 0.717,
-          "draw_implied": 0.185,
-          "away_implied": 0.098,
-          "home_edge": -0.088,
-          "draw_edge": 0.027,
-          "away_edge": 0.06
-        },
-        {
-          "bookmaker": "nordicbet",
-          "home_odds": 1.23,
-          "draw_odds": 5.8,
-          "away_odds": 9.6,
-          "home_implied": 0.746,
-          "draw_implied": 0.158,
-          "away_implied": 0.096,
-          "home_edge": -0.117,
-          "draw_edge": 0.054,
-          "away_edge": 0.063
-        },
-        {
-          "bookmaker": "onexbet",
-          "home_odds": 1.82,
-          "draw_odds": 3.53,
-          "away_odds": 5.03,
-          "home_implied": 0.533,
-          "draw_implied": 0.275,
-          "away_implied": 0.193,
-          "home_edge": 0.096,
-          "draw_edge": -0.062,
-          "away_edge": -0.034
-        },
-        {
-          "bookmaker": "pinnacle",
-          "home_odds": 1.8,
-          "draw_odds": 3.7,
-          "away_odds": 4.75,
-          "home_implied": 0.536,
-          "draw_implied": 0.261,
-          "away_implied": 0.203,
-          "home_edge": 0.093,
-          "draw_edge": -0.048,
-          "away_edge": -0.045
-        },
-        {
-          "bookmaker": "pmu_fr",
-          "home_odds": 1.23,
-          "draw_odds": 4.8,
-          "away_odds": 9.0,
-          "home_implied": 0.718,
-          "draw_implied": 0.184,
-          "away_implied": 0.098,
-          "home_edge": -0.089,
-          "draw_edge": 0.029,
-          "away_edge": 0.06
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 1.36,
-          "draw_odds": 4.4,
-          "away_odds": 7.0,
-          "home_implied": 0.665,
-          "draw_implied": 0.206,
-          "away_implied": 0.129,
-          "home_edge": -0.036,
-          "draw_edge": 0.007,
-          "away_edge": 0.029
-        },
-        {
-          "bookmaker": "tipico_de",
-          "home_odds": 1.22,
-          "draw_odds": 6.0,
-          "away_odds": 10.0,
-          "home_implied": 0.755,
-          "draw_implied": 0.153,
-          "away_implied": 0.092,
-          "home_edge": -0.125,
-          "draw_edge": 0.059,
-          "away_edge": 0.066
-        },
-        {
-          "bookmaker": "unibet_fr",
-          "home_odds": 1.69,
-          "draw_odds": 3.45,
-          "away_odds": 4.2,
-          "home_implied": 0.528,
-          "draw_implied": 0.259,
-          "away_implied": 0.213,
-          "home_edge": 0.101,
-          "draw_edge": -0.046,
-          "away_edge": -0.054
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "home_odds": 1.26,
-          "draw_odds": 5.25,
-          "away_odds": 9.0,
-          "home_implied": 0.725,
-          "draw_implied": 0.174,
-          "away_implied": 0.101,
-          "home_edge": -0.096,
-          "draw_edge": 0.039,
-          "away_edge": 0.057
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 1.27,
-          "draw_odds": 5.0,
-          "away_odds": 9.5,
-          "home_implied": 0.721,
-          "draw_implied": 0.183,
-          "away_implied": 0.096,
-          "home_edge": -0.092,
-          "draw_edge": 0.03,
-          "away_edge": 0.062
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 1.29,
-          "draw_odds": 4.9,
-          "away_odds": 8.0,
-          "home_implied": 0.702,
-          "draw_implied": 0.185,
-          "away_implied": 0.113,
-          "home_edge": -0.073,
-          "draw_edge": 0.028,
-          "away_edge": 0.045
-        },
-        {
-          "bookmaker": "winamax_fr",
-          "home_odds": 1.33,
-          "draw_odds": 4.5,
-          "away_odds": 6.75,
-          "home_implied": 0.67,
-          "draw_implied": 0.198,
-          "away_implied": 0.132,
-          "home_edge": -0.041,
-          "draw_edge": 0.015,
-          "away_edge": 0.026
-        }
-      ],
-      "value_bets": [
-        {
-          "bookmaker": "betfair_ex_eu",
-          "outcome": "home_win",
-          "model_prob": 0.629,
-          "bookmaker_odds": 1.82,
-          "implied_prob": 0.549,
-          "edge": 0.08,
-          "kelly": 0.178,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "betonlineag",
-          "outcome": "home_win",
-          "model_prob": 0.629,
-          "bookmaker_odds": 1.75,
-          "implied_prob": 0.524,
-          "edge": 0.105,
-          "kelly": 0.244,
-          "confidence_tier": "high"
-        },
-        {
-          "bookmaker": "betsson",
-          "outcome": "draw",
-          "model_prob": 0.213,
-          "bookmaker_odds": 5.8,
-          "implied_prob": 0.158,
-          "edge": 0.054,
-          "kelly": 0.066,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "betsson",
-          "outcome": "away_win",
-          "model_prob": 0.158,
-          "bookmaker_odds": 9.6,
-          "implied_prob": 0.096,
-          "edge": 0.063,
-          "kelly": 0.07,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "codere_it",
-          "outcome": "home_win",
-          "model_prob": 0.629,
-          "bookmaker_odds": 1.8,
-          "implied_prob": 0.524,
-          "edge": 0.105,
-          "kelly": 0.237,
-          "confidence_tier": "high"
-        },
-        {
-          "bookmaker": "everygame",
-          "outcome": "home_win",
-          "model_prob": 0.629,
-          "bookmaker_odds": 1.75,
-          "implied_prob": 0.532,
-          "edge": 0.097,
-          "kelly": 0.227,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "gtbets",
-          "outcome": "home_win",
-          "model_prob": 0.629,
-          "bookmaker_odds": 1.78,
-          "implied_prob": 0.525,
-          "edge": 0.104,
-          "kelly": 0.237,
-          "confidence_tier": "high"
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "outcome": "away_win",
-          "model_prob": 0.158,
-          "bookmaker_odds": 9.0,
-          "implied_prob": 0.098,
-          "edge": 0.06,
-          "kelly": 0.068,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "marathonbet",
-          "outcome": "home_win",
-          "model_prob": 0.629,
-          "bookmaker_odds": 1.75,
-          "implied_prob": 0.533,
-          "edge": 0.096,
-          "kelly": 0.223,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "matchbook",
-          "outcome": "away_win",
-          "model_prob": 0.158,
-          "bookmaker_odds": 10.0,
-          "implied_prob": 0.098,
-          "edge": 0.06,
-          "kelly": 0.067,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "nordicbet",
-          "outcome": "draw",
-          "model_prob": 0.213,
-          "bookmaker_odds": 5.8,
-          "implied_prob": 0.158,
-          "edge": 0.054,
-          "kelly": 0.066,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "nordicbet",
-          "outcome": "away_win",
-          "model_prob": 0.158,
-          "bookmaker_odds": 9.6,
-          "implied_prob": 0.096,
-          "edge": 0.063,
-          "kelly": 0.07,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "onexbet",
-          "outcome": "home_win",
-          "model_prob": 0.629,
-          "bookmaker_odds": 1.82,
-          "implied_prob": 0.533,
-          "edge": 0.096,
-          "kelly": 0.214,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "pinnacle",
-          "outcome": "home_win",
-          "model_prob": 0.629,
-          "bookmaker_odds": 1.8,
-          "implied_prob": 0.536,
-          "edge": 0.093,
-          "kelly": 0.209,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "pmu_fr",
-          "outcome": "away_win",
-          "model_prob": 0.158,
-          "bookmaker_odds": 9.0,
-          "implied_prob": 0.098,
-          "edge": 0.06,
-          "kelly": 0.068,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "tipico_de",
-          "outcome": "draw",
-          "model_prob": 0.213,
-          "bookmaker_odds": 6.0,
-          "implied_prob": 0.153,
-          "edge": 0.059,
-          "kelly": 0.071,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "tipico_de",
-          "outcome": "away_win",
-          "model_prob": 0.158,
-          "bookmaker_odds": 10.0,
-          "implied_prob": 0.092,
-          "edge": 0.066,
-          "kelly": 0.074,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "unibet_fr",
-          "outcome": "home_win",
-          "model_prob": 0.629,
-          "bookmaker_odds": 1.69,
-          "implied_prob": 0.528,
-          "edge": 0.101,
-          "kelly": 0.246,
-          "confidence_tier": "high"
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "outcome": "away_win",
-          "model_prob": 0.158,
-          "bookmaker_odds": 9.0,
-          "implied_prob": 0.101,
-          "edge": 0.057,
-          "kelly": 0.064,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "unibet_se",
-          "outcome": "away_win",
-          "model_prob": 0.158,
-          "bookmaker_odds": 9.5,
-          "implied_prob": 0.096,
-          "edge": 0.062,
-          "kelly": 0.069,
-          "confidence_tier": "low"
-        }
-      ]
-    },
-    {
-      "match_id": 99344,
-      "league": "3. Liga",
-      "date": "2026-04-08",
-      "home_team": "VfB Stuttgart II",
-      "away_team": "SSV Ulm 1846",
-      "prediction": {
-        "home_win": 0.233,
-        "draw": 0.248,
-        "away_win": 0.519,
-        "predicted_outcome": "away_win",
-        "confidence": "medium"
-      },
-      "odds_comparison": [
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 3.6,
-          "draw_odds": 3.9,
-          "away_odds": 2.06,
-          "home_implied": 0.272,
-          "draw_implied": 0.251,
-          "away_implied": 0.476,
-          "home_edge": -0.039,
-          "draw_edge": -0.004,
-          "away_edge": 0.043
-        },
-        {
-          "bookmaker": "betonlineag",
-          "home_odds": 3.24,
-          "draw_odds": 3.72,
-          "away_odds": 1.94,
-          "home_implied": 0.282,
-          "draw_implied": 0.246,
-          "away_implied": 0.472,
-          "home_edge": -0.049,
-          "draw_edge": 0.002,
-          "away_edge": 0.048
-        },
-        {
-          "bookmaker": "codere_it",
-          "home_odds": 3.35,
-          "draw_odds": 3.7,
-          "away_odds": 1.93,
-          "home_implied": 0.275,
-          "draw_implied": 0.249,
-          "away_implied": 0.477,
-          "home_edge": -0.041,
-          "draw_edge": -0.001,
-          "away_edge": 0.043
-        },
-        {
-          "bookmaker": "coolbet",
-          "home_odds": 3.4,
-          "draw_odds": 3.6,
-          "away_odds": 1.91,
-          "home_implied": 0.268,
-          "draw_implied": 0.254,
-          "away_implied": 0.478,
-          "home_edge": -0.035,
-          "draw_edge": -0.006,
-          "away_edge": 0.041
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 2.95,
-          "draw_odds": 3.4,
-          "away_odds": 2.0,
-          "home_implied": 0.299,
-          "draw_implied": 0.26,
-          "away_implied": 0.441,
-          "home_edge": -0.066,
-          "draw_edge": -0.012,
-          "away_edge": 0.078
-        },
-        {
-          "bookmaker": "pinnacle",
-          "home_odds": 3.55,
-          "draw_odds": 3.92,
-          "away_odds": 1.94,
-          "home_implied": 0.268,
-          "draw_implied": 0.242,
-          "away_implied": 0.49,
-          "home_edge": -0.035,
-          "draw_edge": 0.005,
-          "away_edge": 0.029
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 3.25,
-          "draw_odds": 3.4,
-          "away_odds": 1.85,
-          "home_implied": 0.269,
-          "draw_implied": 0.257,
-          "away_implied": 0.473,
-          "home_edge": -0.036,
-          "draw_edge": -0.01,
-          "away_edge": 0.046
-        },
-        {
-          "bookmaker": "suprabets",
-          "home_odds": 3.2,
-          "draw_odds": 3.65,
-          "away_odds": 1.95,
-          "home_implied": 0.284,
-          "draw_implied": 0.249,
-          "away_implied": 0.467,
-          "home_edge": -0.051,
-          "draw_edge": -0.002,
-          "away_edge": 0.053
-        },
-        {
-          "bookmaker": "tipico_de",
-          "home_odds": 3.6,
-          "draw_odds": 3.8,
-          "away_odds": 1.85,
-          "home_implied": 0.257,
-          "draw_implied": 0.243,
-          "away_implied": 0.5,
-          "home_edge": -0.024,
-          "draw_edge": 0.004,
-          "away_edge": 0.019
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 3.05,
-          "draw_odds": 3.5,
-          "away_odds": 2.07,
-          "home_implied": 0.299,
-          "draw_implied": 0.261,
-          "away_implied": 0.441,
-          "home_edge": -0.066,
-          "draw_edge": -0.013,
-          "away_edge": 0.079
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 3.35,
-          "draw_odds": 3.55,
-          "away_odds": 1.9,
-          "home_implied": 0.27,
-          "draw_implied": 0.255,
-          "away_implied": 0.476,
-          "home_edge": -0.037,
-          "draw_edge": -0.007,
-          "away_edge": 0.044
-        }
-      ],
-      "value_bets": [
-        {
-          "bookmaker": "leovegas_se",
-          "outcome": "away_win",
-          "model_prob": 0.519,
-          "bookmaker_odds": 2.0,
-          "implied_prob": 0.441,
-          "edge": 0.078,
-          "kelly": 0.156,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "suprabets",
-          "outcome": "away_win",
-          "model_prob": 0.519,
-          "bookmaker_odds": 1.95,
-          "implied_prob": 0.467,
-          "edge": 0.053,
-          "kelly": 0.108,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "unibet_se",
-          "outcome": "away_win",
-          "model_prob": 0.519,
-          "bookmaker_odds": 2.07,
-          "implied_prob": 0.441,
-          "edge": 0.079,
-          "kelly": 0.152,
-          "confidence_tier": "medium"
-        }
-      ]
-    },
-    {
-      "match_id": 75718,
-      "league": "3. Liga",
-      "date": "2026-04-08",
-      "home_team": "Wehen Wiesbaden",
-      "away_team": "TSV Havelse",
-      "prediction": {
-        "home_win": 0.324,
-        "draw": 0.224,
-        "away_win": 0.452,
-        "predicted_outcome": "away_win",
-        "confidence": "medium"
-      },
-      "odds_comparison": [
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 2.88,
-          "draw_odds": 4.0,
-          "away_odds": 2.38,
-          "home_implied": 0.341,
-          "draw_implied": 0.246,
-          "away_implied": 0.413,
-          "home_edge": -0.018,
-          "draw_edge": -0.021,
-          "away_edge": 0.039
-        },
-        {
-          "bookmaker": "betonlineag",
-          "home_odds": 4.45,
-          "draw_odds": 4.26,
-          "away_odds": 1.55,
-          "home_implied": 0.203,
-          "draw_implied": 0.213,
-          "away_implied": 0.584,
-          "home_edge": 0.12,
-          "draw_edge": 0.012,
-          "away_edge": -0.132
-        },
-        {
-          "bookmaker": "betsson",
-          "home_odds": 2.4,
-          "draw_odds": 3.65,
-          "away_odds": 2.35,
-          "home_implied": 0.373,
-          "draw_implied": 0.245,
-          "away_implied": 0.381,
-          "home_edge": -0.05,
-          "draw_edge": -0.021,
-          "away_edge": 0.071
-        },
-        {
-          "bookmaker": "codere_it",
-          "home_odds": 4.5,
-          "draw_odds": 4.1,
-          "away_odds": 1.59,
-          "home_implied": 0.203,
-          "draw_implied": 0.223,
-          "away_implied": 0.574,
-          "home_edge": 0.121,
-          "draw_edge": 0.002,
-          "away_edge": -0.122
-        },
-        {
-          "bookmaker": "coolbet",
-          "home_odds": 2.5,
-          "draw_odds": 3.75,
-          "away_odds": 2.4,
-          "home_implied": 0.369,
-          "draw_implied": 0.246,
-          "away_implied": 0.385,
-          "home_edge": -0.046,
-          "draw_edge": -0.022,
-          "away_edge": 0.067
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 2.63,
-          "draw_odds": 3.5,
-          "away_odds": 2.12,
-          "home_implied": 0.334,
-          "draw_implied": 0.251,
-          "away_implied": 0.415,
-          "home_edge": -0.011,
-          "draw_edge": -0.027,
-          "away_edge": 0.037
-        },
-        {
-          "bookmaker": "nordicbet",
-          "home_odds": 2.6,
-          "draw_odds": 3.5,
-          "away_odds": 2.2,
-          "home_implied": 0.342,
-          "draw_implied": 0.254,
-          "away_implied": 0.404,
-          "home_edge": -0.018,
-          "draw_edge": -0.03,
-          "away_edge": 0.048
-        },
-        {
-          "bookmaker": "pinnacle",
-          "home_odds": 4.71,
-          "draw_odds": 4.52,
-          "away_odds": 1.62,
-          "home_implied": 0.202,
-          "draw_implied": 0.211,
-          "away_implied": 0.587,
-          "home_edge": 0.122,
-          "draw_edge": 0.014,
-          "away_edge": -0.136
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 2.5,
-          "draw_odds": 3.3,
-          "away_odds": 2.25,
-          "home_implied": 0.349,
-          "draw_implied": 0.264,
-          "away_implied": 0.387,
-          "home_edge": -0.025,
-          "draw_edge": -0.04,
-          "away_edge": 0.065
-        },
-        {
-          "bookmaker": "suprabets",
-          "home_odds": 2.65,
-          "draw_odds": 3.65,
-          "away_odds": 2.23,
-          "home_implied": 0.343,
-          "draw_implied": 0.249,
-          "away_implied": 0.408,
-          "home_edge": -0.019,
-          "draw_edge": -0.025,
-          "away_edge": 0.044
-        },
-        {
-          "bookmaker": "tipico_de",
-          "home_odds": 2.6,
-          "draw_odds": 4.0,
-          "away_odds": 2.2,
-          "home_implied": 0.353,
-          "draw_implied": 0.23,
-          "away_implied": 0.417,
-          "home_edge": -0.029,
-          "draw_edge": -0.005,
-          "away_edge": 0.035
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "home_odds": 2.7,
-          "draw_odds": 3.65,
-          "away_odds": 2.18,
-          "home_implied": 0.336,
-          "draw_implied": 0.248,
-          "away_implied": 0.416,
-          "home_edge": -0.012,
-          "draw_edge": -0.024,
-          "away_edge": 0.036
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 2.7,
-          "draw_odds": 3.65,
-          "away_odds": 2.18,
-          "home_implied": 0.336,
-          "draw_implied": 0.248,
-          "away_implied": 0.416,
-          "home_edge": -0.012,
-          "draw_edge": -0.024,
-          "away_edge": 0.036
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 2.45,
-          "draw_odds": 3.65,
-          "away_odds": 2.35,
-          "home_implied": 0.368,
-          "draw_implied": 0.247,
-          "away_implied": 0.384,
-          "home_edge": -0.045,
-          "draw_edge": -0.023,
-          "away_edge": 0.068
-        }
-      ],
-      "value_bets": [
-        {
-          "bookmaker": "betonlineag",
-          "outcome": "home_win",
-          "model_prob": 0.324,
-          "bookmaker_odds": 4.45,
-          "implied_prob": 0.203,
-          "edge": 0.12,
-          "kelly": 0.155,
-          "confidence_tier": "high"
-        },
-        {
-          "bookmaker": "betsson",
-          "outcome": "away_win",
-          "model_prob": 0.452,
-          "bookmaker_odds": 2.35,
-          "implied_prob": 0.381,
-          "edge": 0.071,
-          "kelly": 0.123,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "codere_it",
-          "outcome": "home_win",
-          "model_prob": 0.324,
-          "bookmaker_odds": 4.5,
-          "implied_prob": 0.203,
-          "edge": 0.121,
-          "kelly": 0.155,
-          "confidence_tier": "high"
-        },
-        {
-          "bookmaker": "coolbet",
-          "outcome": "away_win",
-          "model_prob": 0.452,
-          "bookmaker_odds": 2.4,
-          "implied_prob": 0.385,
-          "edge": 0.067,
-          "kelly": 0.115,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "pinnacle",
-          "outcome": "home_win",
-          "model_prob": 0.324,
-          "bookmaker_odds": 4.71,
-          "implied_prob": 0.202,
-          "edge": 0.122,
-          "kelly": 0.154,
-          "confidence_tier": "high"
-        },
-        {
-          "bookmaker": "sport888",
-          "outcome": "away_win",
-          "model_prob": 0.452,
-          "bookmaker_odds": 2.25,
-          "implied_prob": 0.387,
-          "edge": 0.065,
-          "kelly": 0.116,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "winamax_de",
-          "outcome": "away_win",
-          "model_prob": 0.452,
-          "bookmaker_odds": 2.35,
-          "implied_prob": 0.384,
-          "edge": 0.068,
-          "kelly": 0.118,
-          "confidence_tier": "low"
-        }
-      ]
-    },
-    {
-      "match_id": 27842,
-      "league": "3. Liga",
-      "date": "2026-04-08",
-      "home_team": "FC Ingolstadt 04",
-      "away_team": "FC Viktoria K\u00f6ln 1904",
-      "prediction": {
-        "home_win": 0.504,
-        "draw": 0.212,
-        "away_win": 0.284,
-        "predicted_outcome": "home_win",
-        "confidence": "medium"
-      },
-      "odds_comparison": [
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 2.04,
-          "draw_odds": 3.9,
-          "away_odds": 3.8,
-          "home_implied": 0.485,
-          "draw_implied": 0.254,
-          "away_implied": 0.261,
-          "home_edge": 0.019,
-          "draw_edge": -0.041,
-          "away_edge": 0.023
-        },
-        {
-          "bookmaker": "betonlineag",
-          "home_odds": 1.89,
-          "draw_odds": 3.55,
-          "away_odds": 3.49,
-          "home_implied": 0.482,
-          "draw_implied": 0.257,
-          "away_implied": 0.261,
-          "home_edge": 0.022,
-          "draw_edge": -0.044,
-          "away_edge": 0.022
-        },
-        {
-          "bookmaker": "betsson",
-          "home_odds": 1.85,
-          "draw_odds": 3.5,
-          "away_odds": 3.3,
-          "home_implied": 0.479,
-          "draw_implied": 0.253,
-          "away_implied": 0.268,
-          "home_edge": 0.025,
-          "draw_edge": -0.041,
-          "away_edge": 0.015
-        },
-        {
-          "bookmaker": "codere_it",
-          "home_odds": 1.89,
-          "draw_odds": 3.65,
-          "away_odds": 3.5,
-          "home_implied": 0.486,
-          "draw_implied": 0.252,
-          "away_implied": 0.262,
-          "home_edge": 0.018,
-          "draw_edge": -0.039,
-          "away_edge": 0.021
-        },
-        {
-          "bookmaker": "coolbet",
-          "home_odds": 1.91,
-          "draw_odds": 3.6,
-          "away_odds": 3.5,
-          "home_implied": 0.482,
-          "draw_implied": 0.256,
-          "away_implied": 0.263,
-          "home_edge": 0.022,
-          "draw_edge": -0.043,
-          "away_edge": 0.021
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 1.73,
-          "draw_odds": 3.6,
-          "away_odds": 3.55,
-          "home_implied": 0.508,
-          "draw_implied": 0.244,
-          "away_implied": 0.248,
-          "home_edge": -0.004,
-          "draw_edge": -0.032,
-          "away_edge": 0.036
-        },
-        {
-          "bookmaker": "nordicbet",
-          "home_odds": 1.85,
-          "draw_odds": 3.5,
-          "away_odds": 3.3,
-          "home_implied": 0.479,
-          "draw_implied": 0.253,
-          "away_implied": 0.268,
-          "home_edge": 0.025,
-          "draw_edge": -0.041,
-          "away_edge": 0.015
-        },
-        {
-          "bookmaker": "pinnacle",
-          "home_odds": 1.93,
-          "draw_odds": 3.8,
-          "away_odds": 3.69,
-          "home_implied": 0.492,
-          "draw_implied": 0.25,
-          "away_implied": 0.258,
-          "home_edge": 0.012,
-          "draw_edge": -0.038,
-          "away_edge": 0.026
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 1.85,
-          "draw_odds": 3.4,
-          "away_odds": 3.4,
-          "home_implied": 0.479,
-          "draw_implied": 0.261,
-          "away_implied": 0.261,
-          "home_edge": 0.025,
-          "draw_edge": -0.048,
-          "away_edge": 0.023
-        },
-        {
-          "bookmaker": "suprabets",
-          "home_odds": 1.9,
-          "draw_odds": 3.6,
-          "away_odds": 3.35,
-          "home_implied": 0.477,
-          "draw_implied": 0.252,
-          "away_implied": 0.271,
-          "home_edge": 0.027,
-          "draw_edge": -0.039,
-          "away_edge": 0.013
-        },
-        {
-          "bookmaker": "tipico_de",
-          "home_odds": 1.85,
-          "draw_odds": 3.8,
-          "away_odds": 3.6,
-          "home_implied": 0.5,
-          "draw_implied": 0.243,
-          "away_implied": 0.257,
-          "home_edge": 0.004,
-          "draw_edge": -0.031,
-          "away_edge": 0.027
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "home_odds": 1.79,
-          "draw_odds": 3.7,
-          "away_odds": 3.7,
-          "home_implied": 0.508,
-          "draw_implied": 0.246,
-          "away_implied": 0.246,
-          "home_edge": -0.004,
-          "draw_edge": -0.033,
-          "away_edge": 0.038
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 1.79,
-          "draw_odds": 3.7,
-          "away_odds": 3.7,
-          "home_implied": 0.508,
-          "draw_implied": 0.246,
-          "away_implied": 0.246,
-          "home_edge": -0.004,
-          "draw_edge": -0.033,
-          "away_edge": 0.038
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 1.88,
-          "draw_odds": 3.55,
-          "away_odds": 3.45,
-          "home_implied": 0.482,
-          "draw_implied": 0.255,
-          "away_implied": 0.263,
-          "home_edge": 0.022,
-          "draw_edge": -0.043,
-          "away_edge": 0.021
-        }
-      ],
+      "odds_comparison": [],
       "value_bets": []
     },
     {
-      "match_id": 29612,
-      "league": "3. Liga",
-      "date": "2026-04-08",
-      "home_team": "1. FC Saarbr\u00fccken",
-      "away_team": "Alemannia Aachen",
+      "match_id": 538098,
+      "league": "Premier League",
+      "date": "2026-04-11",
+      "home_team": "Brentford FC",
+      "away_team": "Everton FC",
       "prediction": {
-        "home_win": 0.464,
-        "draw": 0.265,
-        "away_win": 0.271,
-        "predicted_outcome": "home_win",
-        "confidence": "medium"
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
       },
-      "odds_comparison": [
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 2.22,
-          "draw_odds": 3.75,
-          "away_odds": 3.4,
-          "home_implied": 0.445,
-          "draw_implied": 0.264,
-          "away_implied": 0.291,
-          "home_edge": 0.019,
-          "draw_edge": 0.001,
-          "away_edge": -0.02
-        },
-        {
-          "bookmaker": "betonlineag",
-          "home_odds": 2.14,
-          "draw_odds": 3.5,
-          "away_odds": 2.89,
-          "home_implied": 0.425,
-          "draw_implied": 0.26,
-          "away_implied": 0.315,
-          "home_edge": 0.039,
-          "draw_edge": 0.005,
-          "away_edge": -0.044
-        },
-        {
-          "bookmaker": "betsson",
-          "home_odds": 2.1,
-          "draw_odds": 3.3,
-          "away_odds": 2.92,
-          "home_implied": 0.425,
-          "draw_implied": 0.27,
-          "away_implied": 0.305,
-          "home_edge": 0.039,
-          "draw_edge": -0.005,
-          "away_edge": -0.034
-        },
-        {
-          "bookmaker": "codere_it",
-          "home_odds": 2.18,
-          "draw_odds": 3.45,
-          "away_odds": 2.9,
-          "home_implied": 0.42,
-          "draw_implied": 0.265,
-          "away_implied": 0.315,
-          "home_edge": 0.044,
-          "draw_edge": -0.0,
-          "away_edge": -0.044
-        },
-        {
-          "bookmaker": "coolbet",
-          "home_odds": 2.2,
-          "draw_odds": 3.4,
-          "away_odds": 3.0,
-          "home_implied": 0.42,
-          "draw_implied": 0.272,
-          "away_implied": 0.308,
-          "home_edge": 0.044,
-          "draw_edge": -0.007,
-          "away_edge": -0.037
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 2.04,
-          "draw_odds": 3.3,
-          "away_odds": 2.95,
-          "home_implied": 0.433,
-          "draw_implied": 0.268,
-          "away_implied": 0.299,
-          "home_edge": 0.031,
-          "draw_edge": -0.003,
-          "away_edge": -0.028
-        },
-        {
-          "bookmaker": "nordicbet",
-          "home_odds": 2.1,
-          "draw_odds": 3.3,
-          "away_odds": 2.92,
-          "home_implied": 0.425,
-          "draw_implied": 0.27,
-          "away_implied": 0.305,
-          "home_edge": 0.039,
-          "draw_edge": -0.005,
-          "away_edge": -0.034
-        },
-        {
-          "bookmaker": "pinnacle",
-          "home_odds": 2.22,
-          "draw_odds": 3.67,
-          "away_odds": 3.08,
-          "home_implied": 0.43,
-          "draw_implied": 0.26,
-          "away_implied": 0.31,
-          "home_edge": 0.034,
-          "draw_edge": 0.005,
-          "away_edge": -0.039
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 2.05,
-          "draw_odds": 3.1,
-          "away_odds": 3.1,
-          "home_implied": 0.431,
-          "draw_implied": 0.285,
-          "away_implied": 0.285,
-          "home_edge": 0.033,
-          "draw_edge": -0.02,
-          "away_edge": -0.014
-        },
-        {
-          "bookmaker": "suprabets",
-          "home_odds": 2.15,
-          "draw_odds": 3.35,
-          "away_odds": 2.95,
-          "home_implied": 0.422,
-          "draw_implied": 0.271,
-          "away_implied": 0.307,
-          "home_edge": 0.042,
-          "draw_edge": -0.006,
-          "away_edge": -0.036
-        },
-        {
-          "bookmaker": "tipico_de",
-          "home_odds": 2.2,
-          "draw_odds": 3.6,
-          "away_odds": 2.8,
-          "home_implied": 0.417,
-          "draw_implied": 0.255,
-          "away_implied": 0.328,
-          "home_edge": 0.047,
-          "draw_edge": 0.01,
-          "away_edge": -0.057
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "home_odds": 2.1,
-          "draw_odds": 3.4,
-          "away_odds": 3.05,
-          "home_implied": 0.434,
-          "draw_implied": 0.268,
-          "away_implied": 0.299,
-          "home_edge": 0.03,
-          "draw_edge": -0.003,
-          "away_edge": -0.028
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 2.1,
-          "draw_odds": 3.4,
-          "away_odds": 3.05,
-          "home_implied": 0.434,
-          "draw_implied": 0.268,
-          "away_implied": 0.299,
-          "home_edge": 0.03,
-          "draw_edge": -0.003,
-          "away_edge": -0.028
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 2.1,
-          "draw_odds": 3.35,
-          "away_odds": 2.95,
-          "home_implied": 0.428,
-          "draw_implied": 0.268,
-          "away_implied": 0.304,
-          "home_edge": 0.036,
-          "draw_edge": -0.003,
-          "away_edge": -0.033
-        }
-      ],
+      "odds_comparison": [],
       "value_bets": []
     },
     {
-      "match_id": 18793,
-      "league": "3. Liga",
-      "date": "2026-04-08",
-      "home_team": "SC Verl",
-      "away_team": "Hansa Rostock",
+      "match_id": 538099,
+      "league": "Premier League",
+      "date": "2026-04-11",
+      "home_team": "Burnley FC",
+      "away_team": "Brighton & Hove Albion FC",
       "prediction": {
-        "home_win": 0.348,
-        "draw": 0.246,
-        "away_win": 0.406,
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 538101,
+      "league": "Premier League",
+      "date": "2026-04-11",
+      "home_team": "Liverpool FC",
+      "away_team": "Fulham FC",
+      "prediction": {
+        "home_win": 0.314,
+        "draw": 0.271,
+        "away_win": 0.415,
         "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 538095,
+      "league": "Premier League",
+      "date": "2026-04-12",
+      "home_team": "Sunderland AFC",
+      "away_team": "Tottenham Hotspur FC",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 538096,
+      "league": "Premier League",
+      "date": "2026-04-12",
+      "home_team": "Crystal Palace FC",
+      "away_team": "Newcastle United FC",
+      "prediction": {
+        "home_win": 0.314,
+        "draw": 0.271,
+        "away_win": 0.415,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 538103,
+      "league": "Premier League",
+      "date": "2026-04-12",
+      "home_team": "Nottingham Forest FC",
+      "away_team": "Aston Villa FC",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 538100,
+      "league": "Premier League",
+      "date": "2026-04-12",
+      "home_team": "Chelsea FC",
+      "away_team": "Manchester City FC",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 538102,
+      "league": "Premier League",
+      "date": "2026-04-13",
+      "home_team": "Manchester United FC",
+      "away_team": "Leeds United FC",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544520,
+      "league": "La Liga",
+      "date": "2026-04-10",
+      "home_team": "Real Madrid CF",
+      "away_team": "Girona FC",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544516,
+      "league": "La Liga",
+      "date": "2026-04-11",
+      "home_team": "Real Sociedad de F\u00fatbol",
+      "away_team": "Deportivo Alav\u00e9s",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544514,
+      "league": "La Liga",
+      "date": "2026-04-11",
+      "home_team": "Elche CF",
+      "away_team": "Valencia CF",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544512,
+      "league": "La Liga",
+      "date": "2026-04-11",
+      "home_team": "FC Barcelona",
+      "away_team": "RCD Espanyol de Barcelona",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544517,
+      "league": "La Liga",
+      "date": "2026-04-11",
+      "home_team": "Sevilla FC",
+      "away_team": "Club Atl\u00e9tico de Madrid",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544518,
+      "league": "La Liga",
+      "date": "2026-04-12",
+      "home_team": "CA Osasuna",
+      "away_team": "Real Betis Balompi\u00e9",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544515,
+      "league": "La Liga",
+      "date": "2026-04-12",
+      "home_team": "RCD Mallorca",
+      "away_team": "Rayo Vallecano de Madrid",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544513,
+      "league": "La Liga",
+      "date": "2026-04-12",
+      "home_team": "RC Celta de Vigo",
+      "away_team": "Real Oviedo",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544511,
+      "league": "La Liga",
+      "date": "2026-04-12",
+      "home_team": "Athletic Club",
+      "away_team": "Villarreal CF",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 544519,
+      "league": "La Liga",
+      "date": "2026-04-13",
+      "home_team": "Levante UD",
+      "away_team": "Getafe CF",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 540665,
+      "league": "Bundesliga",
+      "date": "2026-04-10",
+      "home_team": "FC Augsburg",
+      "away_team": "TSG 1899 Hoffenheim",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 540659,
+      "league": "Bundesliga",
+      "date": "2026-04-11",
+      "home_team": "Borussia Dortmund",
+      "away_team": "Bayer 04 Leverkusen",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 540660,
+      "league": "Bundesliga",
+      "date": "2026-04-11",
+      "home_team": "VfL Wolfsburg",
+      "away_team": "Eintracht Frankfurt",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
         "confidence": "low"
       },
       "odds_comparison": [
         {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 3.5,
-          "draw_odds": 3.8,
-          "away_odds": 2.14,
-          "home_implied": 0.281,
-          "draw_implied": 0.259,
-          "away_implied": 0.46,
-          "home_edge": 0.067,
-          "draw_edge": -0.013,
-          "away_edge": -0.054
-        },
-        {
-          "bookmaker": "betonlineag",
-          "home_odds": 3.2,
-          "draw_odds": 3.66,
-          "away_odds": 1.97,
-          "home_implied": 0.286,
-          "draw_implied": 0.25,
-          "away_implied": 0.464,
-          "home_edge": 0.062,
-          "draw_edge": -0.004,
-          "away_edge": -0.058
-        },
-        {
-          "bookmaker": "betsson",
-          "home_odds": 3.15,
-          "draw_odds": 3.5,
-          "away_odds": 1.92,
-          "home_implied": 0.282,
-          "draw_implied": 0.254,
-          "away_implied": 0.463,
-          "home_edge": 0.065,
-          "draw_edge": -0.008,
-          "away_edge": -0.057
-        },
-        {
-          "bookmaker": "codere_it",
-          "home_odds": 3.1,
-          "draw_odds": 3.65,
-          "away_odds": 2.04,
-          "home_implied": 0.297,
-          "draw_implied": 0.252,
-          "away_implied": 0.451,
-          "home_edge": 0.051,
-          "draw_edge": -0.006,
-          "away_edge": -0.045
-        },
-        {
-          "bookmaker": "coolbet",
-          "home_odds": 3.25,
-          "draw_odds": 3.6,
-          "away_odds": 2.0,
-          "home_implied": 0.283,
-          "draw_implied": 0.256,
-          "away_implied": 0.461,
-          "home_edge": 0.064,
-          "draw_edge": -0.01,
-          "away_edge": -0.054
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 2.75,
-          "draw_odds": 3.4,
-          "away_odds": 2.1,
-          "home_implied": 0.321,
-          "draw_implied": 0.259,
-          "away_implied": 0.42,
-          "home_edge": 0.027,
-          "draw_edge": -0.013,
-          "away_edge": -0.014
-        },
-        {
-          "bookmaker": "nordicbet",
-          "home_odds": 3.2,
-          "draw_odds": 3.5,
-          "away_odds": 1.92,
-          "home_implied": 0.279,
-          "draw_implied": 0.255,
-          "away_implied": 0.465,
-          "home_edge": 0.068,
-          "draw_edge": -0.009,
-          "away_edge": -0.059
-        },
-        {
           "bookmaker": "pinnacle",
-          "home_odds": 3.51,
-          "draw_odds": 3.84,
-          "away_odds": 1.98,
-          "home_implied": 0.271,
-          "draw_implied": 0.248,
-          "away_implied": 0.481,
-          "home_edge": 0.076,
-          "draw_edge": -0.002,
-          "away_edge": -0.075
+          "home_odds": 2.6,
+          "draw_odds": 3.7,
+          "away_odds": 2.64,
+          "home_implied": 0.372,
+          "draw_implied": 0.261,
+          "away_implied": 0.366,
+          "home_edge": 0.015,
+          "draw_edge": -0.03,
+          "away_edge": 0.015
         },
         {
-          "bookmaker": "sport888",
-          "home_odds": 3.1,
-          "draw_odds": 3.3,
-          "away_odds": 1.95,
-          "home_implied": 0.283,
-          "draw_implied": 0.266,
-          "away_implied": 0.45,
-          "home_edge": 0.064,
-          "draw_edge": -0.02,
-          "away_edge": -0.044
-        },
-        {
-          "bookmaker": "suprabets",
-          "home_odds": 3.1,
+          "bookmaker": "unibet",
+          "home_odds": 2.43,
           "draw_odds": 3.55,
-          "away_odds": 2.0,
-          "home_implied": 0.292,
-          "draw_implied": 0.255,
-          "away_implied": 0.453,
-          "home_edge": 0.056,
-          "draw_edge": -0.009,
-          "away_edge": -0.047
-        },
-        {
-          "bookmaker": "tipico_de",
-          "home_odds": 3.2,
-          "draw_odds": 3.8,
-          "away_odds": 1.95,
-          "home_implied": 0.287,
-          "draw_implied": 0.242,
-          "away_implied": 0.471,
-          "home_edge": 0.061,
-          "draw_edge": 0.004,
-          "away_edge": -0.065
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "home_odds": 2.85,
-          "draw_odds": 3.5,
-          "away_odds": 2.17,
-          "home_implied": 0.32,
-          "draw_implied": 0.26,
-          "away_implied": 0.42,
-          "home_edge": 0.028,
-          "draw_edge": -0.014,
-          "away_edge": -0.014
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 2.85,
-          "draw_odds": 3.5,
-          "away_odds": 2.17,
-          "home_implied": 0.32,
-          "draw_implied": 0.26,
-          "away_implied": 0.42,
-          "home_edge": 0.028,
-          "draw_edge": -0.014,
-          "away_edge": -0.014
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 3.25,
-          "draw_odds": 3.6,
-          "away_odds": 1.92,
-          "home_implied": 0.278,
-          "draw_implied": 0.251,
-          "away_implied": 0.471,
-          "home_edge": 0.07,
-          "draw_edge": -0.005,
-          "away_edge": -0.065
-        }
-      ],
-      "value_bets": [
-        {
-          "bookmaker": "betfair_ex_eu",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.5,
-          "implied_prob": 0.281,
-          "edge": 0.067,
-          "kelly": 0.093,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "betonlineag",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.2,
-          "implied_prob": 0.286,
-          "edge": 0.062,
-          "kelly": 0.09,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "betsson",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.15,
-          "implied_prob": 0.282,
-          "edge": 0.065,
-          "kelly": 0.096,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "codere_it",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.1,
-          "implied_prob": 0.297,
-          "edge": 0.051,
-          "kelly": 0.075,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "coolbet",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.25,
-          "implied_prob": 0.283,
-          "edge": 0.064,
-          "kelly": 0.093,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "nordicbet",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.2,
-          "implied_prob": 0.279,
-          "edge": 0.068,
-          "kelly": 0.1,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "pinnacle",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.51,
-          "implied_prob": 0.271,
-          "edge": 0.076,
-          "kelly": 0.107,
-          "confidence_tier": "medium"
-        },
-        {
-          "bookmaker": "sport888",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.1,
-          "implied_prob": 0.283,
-          "edge": 0.064,
-          "kelly": 0.095,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "suprabets",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.1,
-          "implied_prob": 0.292,
-          "edge": 0.056,
-          "kelly": 0.082,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "tipico_de",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.2,
-          "implied_prob": 0.287,
-          "edge": 0.061,
-          "kelly": 0.088,
-          "confidence_tier": "low"
-        },
-        {
-          "bookmaker": "winamax_de",
-          "outcome": "home_win",
-          "model_prob": 0.348,
-          "bookmaker_odds": 3.25,
-          "implied_prob": 0.278,
-          "edge": 0.07,
-          "kelly": 0.1,
-          "confidence_tier": "low"
-        }
-      ]
-    },
-    {
-      "match_id": 55923,
-      "league": "Saudi Pro League",
-      "date": "2026-04-08",
-      "home_team": "Al-Hilal",
-      "away_team": "Al-Kholood",
-      "prediction": {
-        "home_win": 0.793,
-        "draw": 0.128,
-        "away_win": 0.079,
-        "predicted_outcome": "home_win",
-        "confidence": "high"
-      },
-      "odds_comparison": [
-        {
-          "bookmaker": "betclic_fr",
-          "home_odds": 1.12,
-          "draw_odds": 8.75,
-          "away_odds": 13.25,
-          "home_implied": 0.825,
-          "draw_implied": 0.106,
-          "away_implied": 0.07,
-          "home_edge": -0.032,
-          "draw_edge": 0.022,
-          "away_edge": 0.009
-        },
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 1.16,
-          "draw_odds": 11.0,
-          "away_odds": 18.5,
-          "home_implied": 0.856,
-          "draw_implied": 0.09,
-          "away_implied": 0.054,
-          "home_edge": -0.063,
-          "draw_edge": 0.038,
-          "away_edge": 0.025
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 1.11,
-          "draw_odds": 8.0,
-          "away_odds": 14.0,
-          "home_implied": 0.821,
-          "draw_implied": 0.114,
-          "away_implied": 0.065,
-          "home_edge": -0.028,
-          "draw_edge": 0.014,
-          "away_edge": 0.014
-        },
-        {
-          "bookmaker": "onexbet",
-          "home_odds": 1.08,
-          "draw_odds": 11.1,
-          "away_odds": 17.5,
-          "home_implied": 0.863,
-          "draw_implied": 0.084,
-          "away_implied": 0.053,
-          "home_edge": -0.07,
-          "draw_edge": 0.044,
-          "away_edge": 0.026
-        },
-        {
-          "bookmaker": "pinnacle",
-          "home_odds": 1.13,
-          "draw_odds": 10.45,
-          "away_odds": 13.64,
-          "home_implied": 0.84,
-          "draw_implied": 0.091,
-          "away_implied": 0.07,
-          "home_edge": -0.047,
-          "draw_edge": 0.037,
-          "away_edge": 0.01
-        },
-        {
-          "bookmaker": "pmu_fr",
-          "home_odds": 1.08,
-          "draw_odds": 7.5,
-          "away_odds": 14.0,
-          "home_implied": 0.819,
-          "draw_implied": 0.118,
-          "away_implied": 0.063,
-          "home_edge": -0.026,
-          "draw_edge": 0.01,
-          "away_edge": 0.016
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 1.1,
-          "draw_odds": 9.0,
-          "away_odds": 15.0,
-          "home_implied": 0.836,
-          "draw_implied": 0.102,
-          "away_implied": 0.061,
-          "home_edge": -0.044,
-          "draw_edge": 0.026,
-          "away_edge": 0.018
-        },
-        {
-          "bookmaker": "tipico_de",
-          "home_odds": 1.11,
-          "draw_odds": 9.0,
-          "away_odds": 13.0,
-          "home_implied": 0.827,
-          "draw_implied": 0.102,
-          "away_implied": 0.071,
-          "home_edge": -0.034,
-          "draw_edge": 0.026,
-          "away_edge": 0.009
-        },
-        {
-          "bookmaker": "unibet_fr",
-          "home_odds": 1.11,
-          "draw_odds": 7.9,
-          "away_odds": 13.0,
-          "home_implied": 0.816,
-          "draw_implied": 0.115,
-          "away_implied": 0.07,
-          "home_edge": -0.023,
-          "draw_edge": 0.013,
-          "away_edge": 0.01
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "home_odds": 1.12,
-          "draw_odds": 8.0,
-          "away_odds": 15.0,
-          "home_implied": 0.823,
-          "draw_implied": 0.115,
-          "away_implied": 0.061,
-          "home_edge": -0.03,
-          "draw_edge": 0.013,
-          "away_edge": 0.018
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 1.12,
-          "draw_odds": 8.0,
-          "away_odds": 15.0,
-          "home_implied": 0.823,
-          "draw_implied": 0.115,
-          "away_implied": 0.061,
-          "home_edge": -0.03,
-          "draw_edge": 0.013,
-          "away_edge": 0.018
-        },
-        {
-          "bookmaker": "williamhill",
-          "home_odds": 1.1,
-          "draw_odds": 9.0,
-          "away_odds": 15.0,
-          "home_implied": 0.836,
-          "draw_implied": 0.102,
-          "away_implied": 0.061,
-          "home_edge": -0.044,
-          "draw_edge": 0.026,
-          "away_edge": 0.018
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 1.12,
-          "draw_odds": 8.5,
-          "away_odds": 11.5,
-          "home_implied": 0.814,
-          "draw_implied": 0.107,
-          "away_implied": 0.079,
-          "home_edge": -0.021,
-          "draw_edge": 0.021,
-          "away_edge": -0.0
-        },
-        {
-          "bookmaker": "winamax_fr",
-          "home_odds": 1.1,
-          "draw_odds": 8.0,
-          "away_odds": 11.5,
-          "home_implied": 0.811,
-          "draw_implied": 0.112,
-          "away_implied": 0.078,
-          "home_edge": -0.018,
-          "draw_edge": 0.016,
-          "away_edge": 0.002
+          "away_odds": 2.7,
+          "home_implied": 0.387,
+          "draw_implied": 0.265,
+          "away_implied": 0.348,
+          "home_edge": -0.0,
+          "draw_edge": -0.033,
+          "away_edge": 0.033
         }
       ],
       "value_bets": []
     },
     {
-      "match_id": 21012,
-      "league": "Saudi Pro League",
-      "date": "2026-04-08",
-      "home_team": "Al-Ittihad",
-      "away_team": "Neom",
+      "match_id": 540663,
+      "league": "Bundesliga",
+      "date": "2026-04-11",
+      "home_team": "RB Leipzig",
+      "away_team": "Borussia M\u00f6nchengladbach",
       "prediction": {
-        "home_win": 0.555,
-        "draw": 0.238,
-        "away_win": 0.207,
+        "home_win": 0.613,
+        "draw": 0.263,
+        "away_win": 0.124,
         "predicted_outcome": "home_win",
-        "confidence": "medium"
+        "confidence": "high"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 540664,
+      "league": "Bundesliga",
+      "date": "2026-04-11",
+      "home_team": "1. FC Heidenheim 1846",
+      "away_team": "1. FC Union Berlin",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 540658,
+      "league": "Bundesliga",
+      "date": "2026-04-11",
+      "home_team": "FC St. Pauli 1910",
+      "away_team": "FC Bayern M\u00fcnchen",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 540662,
+      "league": "Bundesliga",
+      "date": "2026-04-12",
+      "home_team": "1. FC K\u00f6ln",
+      "away_team": "SV Werder Bremen",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 540666,
+      "league": "Bundesliga",
+      "date": "2026-04-12",
+      "home_team": "VfB Stuttgart",
+      "away_team": "Hamburger SV",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
       },
       "odds_comparison": [
         {
-          "bookmaker": "betclic_fr",
-          "home_odds": 1.68,
-          "draw_odds": 3.88,
-          "away_odds": 4.45,
-          "home_implied": 0.552,
-          "draw_implied": 0.239,
-          "away_implied": 0.209,
-          "home_edge": 0.003,
-          "draw_edge": -0.001,
-          "away_edge": -0.002
-        },
-        {
-          "bookmaker": "betfair_ex_eu",
-          "home_odds": 1.73,
-          "draw_odds": 4.3,
-          "away_odds": 4.9,
-          "home_implied": 0.57,
-          "draw_implied": 0.229,
-          "away_implied": 0.201,
-          "home_edge": -0.015,
-          "draw_edge": 0.009,
-          "away_edge": 0.006
-        },
-        {
-          "bookmaker": "leovegas_se",
-          "home_odds": 1.67,
-          "draw_odds": 3.8,
-          "away_odds": 4.2,
-          "home_implied": 0.544,
-          "draw_implied": 0.239,
-          "away_implied": 0.216,
-          "home_edge": 0.011,
-          "draw_edge": -0.001,
-          "away_edge": -0.01
-        },
-        {
-          "bookmaker": "onexbet",
-          "home_odds": 1.69,
-          "draw_odds": 4.02,
-          "away_odds": 4.36,
-          "home_implied": 0.553,
-          "draw_implied": 0.233,
-          "away_implied": 0.214,
-          "home_edge": 0.002,
-          "draw_edge": 0.006,
-          "away_edge": -0.007
-        },
-        {
           "bookmaker": "pinnacle",
-          "home_odds": 1.71,
-          "draw_odds": 4.13,
-          "away_odds": 4.39,
-          "home_implied": 0.554,
-          "draw_implied": 0.23,
-          "away_implied": 0.216,
-          "home_edge": 0.0,
-          "draw_edge": 0.009,
-          "away_edge": -0.009
+          "home_odds": 1.43,
+          "draw_odds": 5.06,
+          "away_odds": 6.99,
+          "home_implied": 0.672,
+          "draw_implied": 0.19,
+          "away_implied": 0.138,
+          "home_edge": -0.286,
+          "draw_edge": 0.042,
+          "away_edge": 0.244
         },
         {
-          "bookmaker": "pmu_fr",
-          "home_odds": 1.61,
-          "draw_odds": 3.7,
-          "away_odds": 4.1,
-          "home_implied": 0.547,
-          "draw_implied": 0.238,
-          "away_implied": 0.215,
-          "home_edge": 0.008,
-          "draw_edge": 0.0,
-          "away_edge": -0.008
-        },
-        {
-          "bookmaker": "sport888",
-          "home_odds": 1.67,
-          "draw_odds": 3.5,
-          "away_odds": 4.0,
-          "home_implied": 0.528,
-          "draw_implied": 0.252,
-          "away_implied": 0.22,
-          "home_edge": 0.027,
-          "draw_edge": -0.014,
-          "away_edge": -0.013
-        },
-        {
-          "bookmaker": "tipico_de",
-          "home_odds": 1.65,
-          "draw_odds": 3.9,
-          "away_odds": 4.4,
-          "home_implied": 0.556,
-          "draw_implied": 0.235,
-          "away_implied": 0.209,
-          "home_edge": -0.001,
-          "draw_edge": 0.003,
-          "away_edge": -0.002
-        },
-        {
-          "bookmaker": "unibet_fr",
-          "home_odds": 1.65,
-          "draw_odds": 3.8,
-          "away_odds": 4.35,
-          "home_implied": 0.551,
-          "draw_implied": 0.239,
-          "away_implied": 0.209,
-          "home_edge": 0.004,
-          "draw_edge": -0.001,
-          "away_edge": -0.002
-        },
-        {
-          "bookmaker": "unibet_nl",
-          "home_odds": 1.68,
-          "draw_odds": 3.85,
-          "away_odds": 4.25,
-          "home_implied": 0.546,
-          "draw_implied": 0.238,
-          "away_implied": 0.216,
-          "home_edge": 0.009,
-          "draw_edge": -0.0,
-          "away_edge": -0.009
-        },
-        {
-          "bookmaker": "unibet_se",
-          "home_odds": 1.68,
-          "draw_odds": 3.85,
-          "away_odds": 4.25,
-          "home_implied": 0.546,
-          "draw_implied": 0.238,
-          "away_implied": 0.216,
-          "home_edge": 0.009,
-          "draw_edge": -0.0,
-          "away_edge": -0.009
-        },
-        {
-          "bookmaker": "williamhill",
-          "home_odds": 1.67,
-          "draw_odds": 3.5,
-          "away_odds": 4.0,
-          "home_implied": 0.528,
-          "draw_implied": 0.252,
-          "away_implied": 0.22,
-          "home_edge": 0.027,
-          "draw_edge": -0.014,
-          "away_edge": -0.013
-        },
-        {
-          "bookmaker": "winamax_de",
-          "home_odds": 1.64,
-          "draw_odds": 3.95,
-          "away_odds": 4.2,
-          "home_implied": 0.554,
-          "draw_implied": 0.23,
-          "away_implied": 0.216,
-          "home_edge": 0.001,
-          "draw_edge": 0.008,
-          "away_edge": -0.009
-        },
-        {
-          "bookmaker": "winamax_fr",
-          "home_odds": 1.62,
-          "draw_odds": 3.85,
-          "away_odds": 4.1,
-          "home_implied": 0.551,
-          "draw_implied": 0.232,
-          "away_implied": 0.218,
-          "home_edge": 0.004,
-          "draw_edge": 0.006,
-          "away_edge": -0.011
+          "bookmaker": "unibet",
+          "home_odds": 1.38,
+          "draw_odds": 5.2,
+          "away_odds": 7.0,
+          "home_implied": 0.684,
+          "draw_implied": 0.181,
+          "away_implied": 0.135,
+          "home_edge": -0.297,
+          "draw_edge": 0.05,
+          "away_edge": 0.247
         }
       ],
+      "value_bets": [
+        {
+          "bookmaker": "pinnacle",
+          "outcome": "away_win",
+          "model_prob": 0.381,
+          "bookmaker_odds": 6.99,
+          "implied_prob": 0.138,
+          "edge": 0.244,
+          "kelly": 0.25,
+          "confidence_tier": "high"
+        },
+        {
+          "bookmaker": "unibet",
+          "outcome": "draw",
+          "model_prob": 0.232,
+          "bookmaker_odds": 5.2,
+          "implied_prob": 0.181,
+          "edge": 0.05,
+          "kelly": 0.062,
+          "confidence_tier": "low"
+        },
+        {
+          "bookmaker": "unibet",
+          "outcome": "away_win",
+          "model_prob": 0.381,
+          "bookmaker_odds": 7.0,
+          "implied_prob": 0.135,
+          "edge": 0.247,
+          "kelly": 0.25,
+          "confidence_tier": "high"
+        }
+      ]
+    },
+    {
+      "match_id": 540661,
+      "league": "Bundesliga",
+      "date": "2026-04-12",
+      "home_team": "1. FSV Mainz 05",
+      "away_team": "SC Freiburg",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 540673,
+      "league": "Bundesliga",
+      "date": "2026-04-17",
+      "home_team": "FC St. Pauli 1910",
+      "away_team": "1. FC K\u00f6ln",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537127,
+      "league": "Serie A",
+      "date": "2026-04-10",
+      "home_team": "AS Roma",
+      "away_team": "AC Pisa 1909",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537129,
+      "league": "Serie A",
+      "date": "2026-04-11",
+      "home_team": "Cagliari Calcio",
+      "away_team": "US Cremonese",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537133,
+      "league": "Serie A",
+      "date": "2026-04-11",
+      "home_team": "Torino FC",
+      "away_team": "Hellas Verona FC",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537126,
+      "league": "Serie A",
+      "date": "2026-04-11",
+      "home_team": "AC Milan",
+      "away_team": "Udinese Calcio",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537128,
+      "league": "Serie A",
+      "date": "2026-04-11",
+      "home_team": "Atalanta BC",
+      "away_team": "Juventus FC",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537130,
+      "league": "Serie A",
+      "date": "2026-04-12",
+      "home_team": "Genoa CFC",
+      "away_team": "US Sassuolo Calcio",
+      "prediction": {
+        "home_win": 0.314,
+        "draw": 0.271,
+        "away_win": 0.415,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537134,
+      "league": "Serie A",
+      "date": "2026-04-12",
+      "home_team": "Parma Calcio 1913",
+      "away_team": "SSC Napoli",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537132,
+      "league": "Serie A",
+      "date": "2026-04-12",
+      "home_team": "Bologna FC 1909",
+      "away_team": "US Lecce",
+      "prediction": {
+        "home_win": 0.314,
+        "draw": 0.271,
+        "away_win": 0.415,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537131,
+      "league": "Serie A",
+      "date": "2026-04-12",
+      "home_team": "Como 1907",
+      "away_team": "FC Internazionale Milano",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 537125,
+      "league": "Serie A",
+      "date": "2026-04-13",
+      "home_team": "ACF Fiorentina",
+      "away_team": "SS Lazio",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542659,
+      "league": "Ligue 1",
+      "date": "2026-04-10",
+      "home_team": "Paris FC",
+      "away_team": "AS Monaco FC",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542663,
+      "league": "Ligue 1",
+      "date": "2026-04-10",
+      "home_team": "Olympique de Marseille",
+      "away_team": "FC Metz",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542658,
+      "league": "Ligue 1",
+      "date": "2026-04-11",
+      "home_team": "AJ Auxerre",
+      "away_team": "FC Nantes",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542666,
+      "league": "Ligue 1",
+      "date": "2026-04-11",
+      "home_team": "Stade Rennais FC 1901",
+      "away_team": "Angers SCO",
+      "prediction": {
+        "home_win": 0.387,
+        "draw": 0.232,
+        "away_win": 0.381,
+        "predicted_outcome": "home_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542660,
+      "league": "Ligue 1",
+      "date": "2026-04-12",
+      "home_team": "Toulouse FC",
+      "away_team": "Lille OSC",
+      "prediction": {
+        "home_win": 0.306,
+        "draw": 0.262,
+        "away_win": 0.432,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542661,
+      "league": "Ligue 1",
+      "date": "2026-04-12",
+      "home_team": "OGC Nice",
+      "away_team": "Le Havre AC",
+      "prediction": {
+        "home_win": 0.314,
+        "draw": 0.271,
+        "away_win": 0.415,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542662,
+      "league": "Ligue 1",
+      "date": "2026-04-12",
+      "home_team": "Olympique Lyonnais",
+      "away_team": "FC Lorient",
+      "prediction": {
+        "home_win": 0.314,
+        "draw": 0.271,
+        "away_win": 0.415,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542674,
+      "league": "Ligue 1",
+      "date": "2026-04-17",
+      "home_team": "Racing Club de Lens",
+      "away_team": "Toulouse FC",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542668,
+      "league": "Ligue 1",
+      "date": "2026-04-18",
+      "home_team": "FC Lorient",
+      "away_team": "Olympique de Marseille",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
+      "value_bets": []
+    },
+    {
+      "match_id": 542675,
+      "league": "Ligue 1",
+      "date": "2026-04-18",
+      "home_team": "Angers SCO",
+      "away_team": "Le Havre AC",
+      "prediction": {
+        "home_win": 0.311,
+        "draw": 0.329,
+        "away_win": 0.36,
+        "predicted_outcome": "away_win",
+        "confidence": "low"
+      },
+      "odds_comparison": [],
       "value_bets": []
     }
   ]

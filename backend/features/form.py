@@ -10,6 +10,15 @@ Features computed per team, per side (home/away separately):
 For windows [3, 5, 10].
 
 H2H features use a 5-year lookback (configurable via feature_config.yaml).
+
+T0.1d alignment fix — `groupby(...).rolling().mean()` returns rows in
+team-grouped order (the second level of its MultiIndex preserves the original
+positional index, but the row sequence is grouped by team). Assigning the
+result with `.values` discards the index and lands each team's stats into
+whatever rows happen to sit at the same positions in the date-sorted target —
+silently scattering Team A's rolling values into Team B/C/D rows. The fix is
+to assign the Series directly, letting pandas align by index. See
+`backend/tests/test_form_alignment.py` and `docs/DATASET_HEALTH_CHECK.md`.
 """
 
 from __future__ import annotations
@@ -35,20 +44,17 @@ def _rolling_team_stats(df: pd.DataFrame, team_col: str, windows: list[int],
                                          "goals_for", "goals_against",
                                          "clean_sheet"]].shift(1)
         rolled = shifted.groupby(df[team_col]).rolling(w, min_periods=1).mean()
-        # The groupby + rolling returns a MultiIndex; reset it
+        # T0.1d: drop the team level only; KEEP the positional index so the
+        # subsequent column assignments align by index, not by row position.
         rolled = rolled.reset_index(level=0, drop=True)
-        df[f"{prefix}_w{w}_win_rate"] = rolled["is_win"].values
-        df[f"{prefix}_w{w}_draw_rate"] = rolled["is_draw"].values
-        df[f"{prefix}_w{w}_loss_rate"] = rolled["is_loss"].values
-        df[f"{prefix}_w{w}_ppg"] = (
-            rolled["is_win"].values * 3 + rolled["is_draw"].values * 1
-        )
-        df[f"{prefix}_w{w}_avg_gf"] = rolled["goals_for"].values
-        df[f"{prefix}_w{w}_avg_ga"] = rolled["goals_against"].values
-        df[f"{prefix}_w{w}_avg_gd"] = (
-            rolled["goals_for"].values - rolled["goals_against"].values
-        )
-        df[f"{prefix}_w{w}_clean_sheet_rate"] = rolled["clean_sheet"].values
+        df[f"{prefix}_w{w}_win_rate"] = rolled["is_win"]
+        df[f"{prefix}_w{w}_draw_rate"] = rolled["is_draw"]
+        df[f"{prefix}_w{w}_loss_rate"] = rolled["is_loss"]
+        df[f"{prefix}_w{w}_ppg"] = rolled["is_win"] * 3 + rolled["is_draw"]
+        df[f"{prefix}_w{w}_avg_gf"] = rolled["goals_for"]
+        df[f"{prefix}_w{w}_avg_ga"] = rolled["goals_against"]
+        df[f"{prefix}_w{w}_avg_gd"] = rolled["goals_for"] - rolled["goals_against"]
+        df[f"{prefix}_w{w}_clean_sheet_rate"] = rolled["clean_sheet"]
     return df
 
 
@@ -96,16 +102,18 @@ def build_form_features(matches: pd.DataFrame, windows: list[int] | None = None)
             .mean()
             .reset_index(level=0, drop=True)
         )
-        all_team_matches[f"w{w}_win_rate"] = rolled["is_win"].values
-        all_team_matches[f"w{w}_draw_rate"] = rolled["is_draw"].values
-        all_team_matches[f"w{w}_loss_rate"] = rolled["is_loss"].values
-        all_team_matches[f"w{w}_ppg"] = rolled["is_win"].values * 3 + rolled["is_draw"].values
-        all_team_matches[f"w{w}_avg_gf"] = rolled["goals_for"].values
-        all_team_matches[f"w{w}_avg_ga"] = rolled["goals_against"].values
-        all_team_matches[f"w{w}_avg_gd"] = (
-            rolled["goals_for"].values - rolled["goals_against"].values
-        )
-        all_team_matches[f"w{w}_clean_sheet_rate"] = rolled["clean_sheet"].values
+        # T0.1d: assign the Series (index-aligned), NOT `.values` (positional).
+        # `groupby.rolling.mean()` returns rows ordered by team group; the
+        # positional .values previously scattered each team's stats into other
+        # teams' rows. Index-aligned assignment puts every value in its own row.
+        all_team_matches[f"w{w}_win_rate"] = rolled["is_win"]
+        all_team_matches[f"w{w}_draw_rate"] = rolled["is_draw"]
+        all_team_matches[f"w{w}_loss_rate"] = rolled["is_loss"]
+        all_team_matches[f"w{w}_ppg"] = rolled["is_win"] * 3 + rolled["is_draw"]
+        all_team_matches[f"w{w}_avg_gf"] = rolled["goals_for"]
+        all_team_matches[f"w{w}_avg_ga"] = rolled["goals_against"]
+        all_team_matches[f"w{w}_avg_gd"] = rolled["goals_for"] - rolled["goals_against"]
+        all_team_matches[f"w{w}_clean_sheet_rate"] = rolled["clean_sheet"]
 
     # ── Merge home stats back to match DataFrame ────────────────────────────
     home_stats = all_team_matches[all_team_matches["side"] == "home"].set_index("match_id")
