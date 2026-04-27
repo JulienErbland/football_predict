@@ -1,0 +1,394 @@
+# Model Review — Findings & Improvement Roadmap
+
+> Based on a full code review + survey of recent research (2024–2026).  
+> No code changes — ideas only. Ordered by expected impact vs. implementation effort.
+
+---
+
+## 0. Phase 1 Baseline (post-T0.1, 2026-04-24)
+
+> ⚠️ **Superseded by T0.1d (2026-04-26)** — the form-feature alignment fix
+> (`backend/features/form.py`) re-trained the ensemble on truthful rolling
+> stats. New holdout numbers are documented in
+> `backend/evaluation/METRICS_CHANGELOG.md` under T0.1d. The numbers in §0.2
+> below are kept as the historical reference point; **do not compare T0.1d
+> numbers to them directly** — the underlying feature table is different, so
+> they measure different models on the same holdout.
+
+The audit (`docs/AUDIT.md`, 2026-04-24) surfaced a production bug: the upcoming-fixture ingestion path (football-data.org API) returned long-form team names ("Arsenal FC") while the historical corpus (football-data.co.uk CSVs) used short-form ("Arsenal"). In `backend/output/predict.py`, every team-keyed feature lookup therefore cold-started on defaults. The pre-fix `predictions.json` (50 upcoming matches) contained only **5 distinct probability tuples** — 18 matches sharing the canonical degenerate vector `(0.387, 0.232, 0.381)`, a further 31 sharing four near-cold-start vectors, and only 1 match emerging with a real team-specific probability.
+
+T0.1 resolved this by introducing `backend/ingestion/name_normalizer.py` — a canonical alias map that every ingestion source (football-data.org, football-data.co.uk CSVs, The Odds API) calls at its output boundary. The training corpus was re-ingested through the normalised path, feature engineering re-run, and the ensemble retrained from a clean dataset. Regression test: `backend/tests/test_name_consistency.py` (8 tests, all passing).
+
+These are the **numbers you should compare every subsequent ML change against**.
+
+### 0.1 Corpus and split
+
+| | |
+|-|-|
+| Training corpus | 7 156 matches × 71 feature columns |
+| Leagues | PL, PD, BL1, SA, FL1 (top-5 European) |
+| Seasons | 2021/22, 2022/23, 2023/24, 2024/25 |
+| Train / held-out split | seasons 2021 + 2022 + 2023 → train (5 404 rows); season 2024 → test (1 752 rows) |
+| Class balance (train) | ~43.4% home / 25.4% draw / 31.2% away |
+| Class balance (test) | 42.0% home (736) / 24.9% draw (437) / 33.1% away (579) |
+| Ensemble | XGBoost (w=0.60) + LightGBM (w=0.40), isotonic-calibrated per base model |
+| Training artefacts | `backend/data/models/{ensemble,xgboost,lightgbm,feature_cols}.pkl`, 2026-04-24 |
+
+### 0.2 Headline metrics on 2024 holdout
+
+| Metric | Phase 1 baseline | Range / reference |
+|--------|-----------------:|-------------------|
+| Accuracy | **0.5126** | random ≈ 0.33; bookmaker ≈ 0.54; published best 0.52–0.56 |
+| Brier score | **0.2005** | range [0, 1]; published competitive band 0.18–0.22 |
+| Ranked Probability Score (RPS) | **0.2065** | range [0, 1]; published competitive band 0.19–0.23 |
+| Log-loss | 1.1014 | random 3-class ≈ 1.099 (ln 3) |
+| Macro-F1 | 0.4168 | — |
+| n_samples | 1752 | 2024-season holdout |
+
+All metrics above use the literature convention (Brier = mean across K=3 classes; RPS = sum-over-thresholds divided by K-1). See `backend/evaluation/METRICS_CHANGELOG.md` for the migration history.
+
+> **Historical note.** Pre-T0.2 (before 2026-04-24), `evaluation/metrics.py` returned the un-normalised forms — Brier 0.6014 and RPS 0.4130 on this same holdout. Multiplying the new values by K=3 and K-1=2 respectively reproduces those legacy numbers. Eval JSON artifacts produced before that date carry the old convention; `eval_phase1_baseline.json` records both side-by-side under `metrics_repo_convention` (legacy) and `metrics_literature_convention` (current).
+
+### 0.3 Per-class breakdown
+
+| Class | Precision | Recall | F1 | argmax picks |
+|-------|-----------|--------|------|--------------|
+| H (home win) | 0.5563 | 0.6916 | 0.6166 | 915 / 1752 (52.2%) |
+| **D (draw)** | **0.2857** | **0.0503** | **0.0856** | **77 / 1752 (4.4%)** |
+| A (away win) | 0.4829 | 0.6339 | 0.5482 | 760 / 1752 (43.4%) |
+
+Confusion matrix (rows = true, cols = predicted):
+
+|        | pred H | pred D | pred A |
+|--------|-------:|-------:|-------:|
+| true H | 509    | 29     | 198    |
+| true D | 220    | 22     | 195    |
+| true A | 186    | 26     | 367    |
+
+### 0.4 Draw probability distribution
+
+The model rarely emits a draw probability above 0.30. 85% of the test set sits in the 0.20–0.30 draw-prob band, where it is well-calibrated *on average* but effectively constant per-sample — argmax almost never picks draw because either home or away always exceeds the squashed draw value.
+
+| p_draw bin | n | avg pred | actual rate |
+|-----------:|--:|---------:|------------:|
+| [0.10, 0.20) | 54 | 0.177 | 0.241 |
+| [0.20, 0.25) | **1 063** | 0.234 | 0.259 |
+| [0.25, 0.30) | 416 | 0.269 | 0.190 |
+| [0.30, 0.35) | 119 | 0.318 | 0.370 |
+| [0.35, 0.40) | 76 | 0.370 | 0.276 |
+| [0.40, 0.50) | 21 | 0.428 | 0.238 |
+
+### 0.5 Comparison to pre-fix audit
+
+The aggregate numbers barely moved relative to the audit's pre-fix measurements (`docs/AUDIT.md §0.1.4`):
+
+| Metric | Pre-fix (audit) | Phase 1 baseline | Δ |
+|--------|-----------------:|------------------:|----:|
+| Accuracy | 0.5211 | 0.5126 | −0.0085 |
+| Brier (sum, pre-T0.2) | 0.5997 | 0.6014 | +0.0017 |
+| RPS (sum, pre-T0.2) | 0.4117 | 0.4130 | +0.0013 |
+| Log-loss | 1.0617 | 1.1014 | +0.0397 |
+| Macro-F1 | 0.4156 | 0.4168 | +0.0012 |
+| F1 draw | 0.0667 | 0.0856 | +0.0189 |
+
+> The Brier and RPS rows above use the pre-T0.2 sum convention so the comparison stays apples-to-apples with the audit numbers (which were measured before the convention fix). The audit doc cannot be retroactively renormalised. Going forward, only literature-convention values appear in §0.2 and in `eval_*.json` files.
+
+The deltas are small because **the bug never corrupted training**. The historical corpus used CSV short-form names internally consistently, so the feature pipeline and the model both saw a coherent world during fit and holdout evaluation. The bug lived at inference time, in `predict.py`, where the API-style upcoming row was appended to a CSV-style historical frame. The pre-fix numbers were therefore an honest measurement of what the ensemble had learned — what was dishonest was the production `predictions.json` those same weights then emitted. T0.1 fixes the inference path; training/holdout metrics move only by retraining noise (different XGBoost early-stopping iteration: 41 now, unknown-but-different at audit time).
+
+### 0.6 What this baseline tells us for Phase 2
+
+1. **Aggregate headroom**: normalised RPS 0.2065 is already inside the literature "expert band" of 0.19–0.23, and per-class Brier 0.2005 is at the published-model ceiling. Phase 2 gains will be small on aggregate metrics unless the draw class is fixed.
+2. **Draw class is the binding constraint**. Draw F1 = 0.0856 is catastrophically bad; argmax picks draw only 4.4% of the time despite 24.9% of matches actually being draws. This is exactly what T2.2 (SMOTE + class weights + threshold tuning) is scoped to fix, and the `min_draw_f1: 0.25` gate stands.
+3. **Home/Away are solid**. F1 ≈ 0.62 / 0.55 on the non-draw classes matches published benchmarks. Changes that regress those while raising draw F1 are a net loss.
+
+### 0.7 Production inference verification
+
+Post-fix spot-check over the full 50-match upcoming slate (2026-04-24): **43 distinct probability tuples** (vs. 5 pre-fix), with Elo values plausibly ranked — Bayern Munich 1753, Real Madrid 1748, Liverpool 1721, Barcelona 1761, Inter 1738, Man City/United mid-table, Leeds 1375 (relegated → low). Only 5 sides default to cold-start Elo=1500 and they are exactly the teams listed in `_KNOWN_NEW_ENTRANTS` (Paris FC, Pisa, Sunderland, Oviedo, Hamburger SV). Sample probabilities: Real Madrid vs Girona = (0.682, 0.248, 0.070), Marseille vs Metz = (0.853, 0.147, 0.000), Atalanta vs Juventus = (0.430, 0.213, 0.357) — exactly the kind of variation that was missing before.
+
+> ⚠️ Cold-start caveat. Five clubs currently in the 2025/26 season were not in the 2021–2024 corpus and therefore still default to cold-start feature values at inference: **Sunderland** (PL), **Oviedo** (PD), **Hamburger SV** (BL1), **Pisa** (SA), **Paris FC** (FL1). This is *correct* behaviour for teams with no training history; it is listed explicitly in the regression test (`_KNOWN_NEW_ENTRANTS`) so any new unmapped alias surfaces as a test failure rather than silently re-introducing the production bug. Ingesting the partial 2025/26 season later will give these clubs real feature values without needing another T0.1-style intervention.
+
+---
+
+## 1. Performance ceiling — what to expect
+
+Before anything else: football is fundamentally noisy. Even a perfect model cannot predict every match because ~30–40% of outcomes are driven by genuine randomness (deflections, individual moments, referee decisions). The academic literature consistently reports these ceilings for the best models:
+
+| Metric | Random baseline | Betting odds | Best published models |
+|--------|----------------|--------------|----------------------|
+| Accuracy | 33% | ~54% | 52–56% |
+| RPS | 0.37 | ~0.20 | 0.195–0.215 |
+| Brier score | 0.67 | ~0.57 | ~0.55 |
+
+**Implication:** chasing accuracy above ~55% with match-level features is likely overfitting. The real gains come from better calibration (getting probabilities right, not just picking winners) and better value bet identification. A well-calibrated 53% model beats a poorly-calibrated 55% model for betting purposes.
+
+---
+
+## 2. Missing features
+
+### 2.1 Player availability — highest priority gap
+
+The current model knows nothing about who is actually playing. A team missing its top striker is indistinguishable from the same team at full strength. This is the single most impactful missing signal.
+
+**What to add:**
+- Injury/suspension flag for each team's top-3 most influential players (by market value or rating)
+- Total injured market value as a fraction of full squad value
+- First-choice goalkeeper availability flag (goalkeepers have outsized defensive impact)
+- Suspension count from yellow card accumulations
+
+**Evidence:** Multiple recent papers confirm player availability explains significant variance that aggregate team stats miss. The *"From Players to Champions"* paper (arXiv 2505.01902) explicitly found player-level features outperform team-level features in generalisation across tournaments.
+
+**Data source:** TransferMarkt injury pages (already scraped in the codebase but not used as features). FBref also publishes injury reports.
+
+---
+
+### 2.2 xG overperformance / underperformance delta
+
+The current xG features are rolling averages of expected goals. What's missing is the **gap between actual goals and expected goals** — a regression-to-the-mean signal.
+
+- A team scoring 2.1 goals/game but only generating 1.3 xG/game is almost certainly due to regress
+- A team conceding fewer goals than their xGA suggests has an unusually good goalkeeper (possibly sustainable) or is getting lucky (unsustainable)
+
+**Features to add:**
+- `home_goals_minus_xg_w10` — rolling difference between actual and expected goals scored
+- `away_goals_allowed_minus_xga_w10` — same on the defensive side
+- Big Chance conversion rate (chances with xG > 0.4 that result in a goal)
+
+**Evidence:** The Frontiers paper *"Bayes-xG"* (2024) and the PMC paper on event-sequence xG both show that plain xG averages leave substantial predictive signal on the table. The overperformance delta is already partially exploited by sharp bookmakers.
+
+---
+
+### 2.3 Season-to-season trajectory
+
+A team currently 3rd that finished 6th last season is on an upward trajectory. A team currently 8th that won the title last year is declining. Rolling form captures within-season momentum but misses cross-season trends entirely.
+
+**Features to add:**
+- `position_delta`: current league position minus end-of-last-season position
+- `elo_delta_since_season_start`: Elo change since the season began
+- Season-over-season points delta (this season points pace vs. last season final points)
+
+---
+
+### 2.4 European competition fatigue
+
+A team playing Champions League Thursday → Premier League Sunday has less recovery time (partially captured by rest days) **and** a rotation incentive. Coaches rest key players for league games when European qualification is not at risk.
+
+**Features to add:**
+- Binary flag: played European match in last 4 days
+- Combined flag: European match in last 4 days AND team is safe in the league (rotation likely)
+- Cumulative European matches played this season (fatigue accumulates)
+
+---
+
+### 2.5 Managerial change flag
+
+Teams that recently changed managers behave erratically in the first 3–5 matches. There is well-documented evidence of a "new manager bounce" — a temporary improvement in results driven by motivational reset, before regressing as opponents adapt to the new tactics.
+
+**Feature to add:**
+- `home_new_manager` / `away_new_manager`: binary flag, "manager changed in last 5 matches"
+- Optionally: matches since manager took over (the bounce decays over ~10 games)
+
+---
+
+### 2.6 Derby / rivalry flag
+
+Derbies produce systematically different distributions: more draws, more red cards, more low-scoring matches, and more upsets. Current form and Elo are poor predictors because motivational intensity overrides quality differences.
+
+A hardcoded list of known rivalries (Manchester Derby, El Clásico, Derby della Madonnina, etc.) with a binary flag would improve calibration on these outlier matches.
+
+---
+
+### 2.7 Weather at the stadium
+
+Wind speed, rain, and cold temperatures suppress goal-scoring and shift outcomes toward draws. Research estimates extreme weather reduces total goals by 10–20%. This effect is large enough to matter for probability calibration.
+
+**Data source:** any weather API using stadium GPS coordinates and match kickoff time. Historical data is freely available from Open-Meteo.
+
+**Features to add:**
+- Wind speed (km/h) at kickoff
+- Precipitation (mm)
+- Temperature (°C)
+- A composite "bad weather" binary flag (wind > 50 km/h OR heavy rain)
+
+---
+
+### 2.8 Home advantage granularity
+
+The current model treats home advantage as a global constant implicit in the home/away form split. But home advantage varies enormously by team and by context.
+
+**Features to add:**
+- Team-specific home win rate (current season)
+- Stadium attendance rate (% of capacity) — a proxy for crowd intensity
+- "Empty stadium" flag (relevant for COVID-era data and could matter in future)
+
+The natural experiment from COVID matches (played behind closed doors) showed home advantage dropped to near zero, providing strong causal evidence that crowd noise is the primary mechanism.
+
+---
+
+### 2.9 Opening bookmaker odds as features (with caveats)
+
+This is philosophically debatable given the project's design principle of keeping odds out of training. However, there is strong academic evidence that bookmaker odds — especially from sharp bookmakers like Pinnacle — are the single best publicly available signal for match outcomes.
+
+**The key distinction:**
+- **Opening odds** (set before sharp money moves the line) = bookmaker's prior, relatively independent of the model
+- **Closing odds** (just before kickoff) = market consensus, highly correlated with any good model's output
+
+Using **opening odds only** as features represents the bookmaker's expert prior. The model then tries to find residual signal *beyond* what the market already knows. The arXiv paper *"The Evolution of Football Betting: A Machine Learning Approach"* (2403.16282) documents this approach as viable and profitable.
+
+**Risk:** if you use closing odds as features during training, you are training the model to mimic the market, which eliminates any edge. Opening odds are safer.
+
+---
+
+### 2.10 Lineup-adjusted quality (player ratings aggregated)
+
+Rather than using squad value as a proxy, summing individual player ratings across the announced lineup gives a more accurate match-day quality estimate.
+
+**Data sources:** FIFA ratings (in EA FC datasets, freely available), FBref's progressive stats, or Wyscout/InStat player scores.
+
+**Features to add:**
+- Sum of FIFA overall ratings of the starting XI
+- Variance of lineup ratings (a team of 11 average players vs. 8 stars + 3 weak links)
+- Rating gap between starting XI and typical XI (measures how much rotation occurred)
+
+The PLOS ONE paper *"A framework of interpretable match results prediction with FIFA ratings and team formation"* showed that FIFA-rating-based features matched or outperformed raw result-based features.
+
+---
+
+## 3. Model architecture improvements
+
+### 3.1 CatBoost as a third model — quick win
+
+CatBoost handles categorical features natively without any encoding. Team names, referee, formation — instead of label-encoding these integers, CatBoost learns optimal categorical splits directly from raw strings. This consistently produces meaningfully better performance on sports data where team identity is itself predictive (certain teams systematically overperform or underperform their feature vector).
+
+The xGFootball Club benchmark (linked below) shows CatBoost competitive with or better than XGBoost on football data. Adding it to the ensemble at ~25% weight gives diversity with minimal code complexity.
+
+**Effort:** low. CatBoost has the same scikit-learn interface as XGBoost/LightGBM.
+
+---
+
+### 3.2 Stacking meta-learner instead of fixed weights
+
+The current ensemble uses fixed weights (60/40). A logistic regression meta-learner trained on out-of-fold (OOF) predictions learns dynamically when to trust XGBoost more vs. LightGBM — for example, it might learn that LightGBM is better calibrated late in the season, or for derbies.
+
+The infrastructure already exists in the codebase (`StackingEnsemble` class in `ensemble.py`). It needs:
+1. OOF predictions generated during training via k-fold
+2. A held-out meta-training set (kept separate from the test set)
+
+**Effort:** medium. Requires refactoring the training loop.
+
+---
+
+### 3.3 Walk-forward cross-validation
+
+The current evaluation trains on 2021–2023 and tests on 2024. This gives a single noisy estimate of generalisation. One lucky/unlucky season can make the model look better or worse than it is.
+
+Walk-forward CV runs multiple folds:
+```
+Fold 1: train 2021      → test 2022
+Fold 2: train 2021–2022 → test 2023
+Fold 3: train 2021–2023 → test 2024
+```
+
+Average the metrics across folds. This gives a far more reliable estimate and catches overfitting to a specific season.
+
+**Effort:** low. Add a loop around the existing train/test logic.
+
+---
+
+### 3.4 TabTransformer or TabNet (future, if dataset grows)
+
+The NeurIPS 2023 paper *"When Do Neural Nets Outperform Boosted Trees on Tabular Data?"* found that neural nets beat GBDTs on tabular data primarily when:
+1. Dataset size > 50,000 rows
+2. Features have complex non-linear compound interactions
+
+At ~10k matches, we are below both thresholds. **However**, if player-level features are added (one row per player per match), the dataset size changes the calculus entirely.
+
+TabTransformer applies self-attention across features — it can learn interactions like "high-Elo team + away game + 3 days rest + derby" as a compound effect without requiring deep tree branching.
+
+**Verdict:** not worth it now. Revisit if data grows to 50k+ rows or if player embeddings are added.
+
+---
+
+### 3.5 Poisson model — fix or drop
+
+The Poisson (Dixon-Coles) model is currently excluded from the ensemble because its `predict_proba()` interface expects team name tuples rather than feature vectors. Two paths forward:
+
+**Option A — Fix the interface:** wrap the Poisson model so it extracts team names from the feature row and routes internally. This lets it rejoin the ensemble and contribute its statistical baseline (especially useful in low-data regimes early in a season when rolling features are sparse).
+
+**Option B — Use standalone for sanity-checking:** keep it excluded from the ensemble but run it separately to cross-check predictions. If the ensemble says 70% home win but Poisson says 45%, that mismatch is worth investigating before betting.
+
+---
+
+## 4. Data pipeline improvements
+
+### 4.1 FBref as an additional data source
+
+FBref (Sports Reference) provides free, detailed match-level and player-level stats including:
+- Progressive passes, progressive carries, pressures, PPDA
+- Player match ratings and participation minutes
+- Expected goals with shot-level detail
+
+The coverage overlaps with StatsBomb for the top leagues but extends to more competitions. Combining both would increase xG data coverage significantly.
+
+### 4.2 Understat for xG
+
+Understat provides free match-level xG data for the top 6 European leagues going back to 2014. It is more practical than StatsBomb (which requires API or open-data parsing) for bulk historical xG fetching. The data includes xG, xGA, and deep/open-play shot breakdowns.
+
+---
+
+## 5. What the research confirms we are already doing right
+
+- **XGBoost + LightGBM ensemble:** the dominant approach in recent benchmarks. No published architecture consistently outperforms this on match-level tabular data at this scale.
+- **Time-based train/test split:** critical and correctly implemented. Random splits systematically inflate reported performance in sports prediction due to form and Elo leakage.
+- **Isotonic calibration:** the right choice over Platt scaling for multi-class sports outcomes.
+- **RPS as primary metric:** academically endorsed as the best metric for ordered 3-class outcomes. Accuracy alone is misleading.
+- **Odds isolation from training:** sound design. Using closing odds as training features produces a model that mimics the market rather than outperforming it.
+
+---
+
+## 6. Priority summary
+
+| # | Idea | Effort | Expected impact |
+|---|------|--------|----------------|
+| 1 | Player availability / injury features | Medium | **Very high** |
+| 2 | xG overperformance delta | Low | High |
+| 3 | Walk-forward cross-validation | Low | High (evaluation quality) |
+| 4 | CatBoost as third ensemble model | Low | Medium-high |
+| 5 | Season-to-season trajectory features | Low | Medium |
+| 6 | European competition fatigue flag | Low | Medium |
+| 7 | Managerial change flag | Low | Medium |
+| 8 | Stacking meta-learner | Medium | Medium |
+| 9 | Opening odds as features | Low | High (but philosophically debatable) |
+| 10 | Weather features | Medium | Low-medium |
+| 11 | Derby / rivalry flag | Low | Low-medium |
+| 12 | Home advantage granularity | Low | Low-medium |
+| 13 | FIFA lineup ratings | High (data sourcing) | High (if data quality is good) |
+| 14 | Fix Poisson model interface | Medium | Low (marginal ensemble gain) |
+| 15 | TabTransformer / neural net | Very high | High (only if dataset > 50k rows) |
+
+---
+
+## 6.5 Known Issues (open)
+
+| ID | File | Issue | Impact today | Fix when |
+|----|------|-------|--------------|----------|
+| T0.1d-FOLLOW | `backend/features/xg_features.py:83-88` | Same `rolled[col].values` positional-assignment anti-pattern that T0.1d fixed in `form.py`. `groupby(...).rolling().mean()` returns rows in team-grouped order; `.values` strips the index and assigns positionally to a date-sorted frame, scattering each team's xG rolling stats into rows of other teams. | **None in production.** The xG builder requires StatsBomb data which isn't wired up; every `features.build` run logs `"xG features skipped — StatsBomb data unavailable"` and the columns are absent from `features.parquet`. | Before integrating any StatsBomb / xG data source. The fix is identical: drop `.values` so pandas aligns by index (one-line change × four assignments). Add a regression test mirroring `tests/test_form_alignment.py`. |
+
+---
+
+## 7. Sources
+
+- [A predictive analytics framework for soccer match outcome forecasting (ScienceDirect, 2024)](https://www.sciencedirect.com/science/article/pii/S2772662224001413)
+- [Data-driven prediction of soccer outcomes using enhanced ML/DL (Springer, 2024)](https://link.springer.com/article/10.1186/s40537-024-01008-2)
+- [Large-Scale In-Game Outcome Forecasting using Axial Transformer (arXiv, 2025)](https://arxiv.org/abs/2511.18730)
+- [Evaluating soccer prediction: deep learning & GBT feature optimization (Springer/ML, 2024)](https://link.springer.com/article/10.1007/s10994-024-06608-w)
+- [Predicting Football Match Outcomes Using Event Data and ML (Training Ground Guru, 2025)](https://trainingground.guru/wp-content/uploads/2025/12/Predicting_Football_Match_Outcomes_Using_Event_Data_and_Machine_Learning_Algorithms.pdf)
+- [From Players to Champions: Generalizable ML for Match Prediction (arXiv, 2025)](https://arxiv.org/html/2505.01902v1)
+- [Which Machine Learning Models Perform Best for Football? (xGFootball Club)](https://thexgfootballclub.substack.com/p/which-machine-learning-models-perform)
+- [Bayes-xG: player and position correction on xG using Bayesian hierarchical approach (Frontiers, 2024)](https://www.frontiersin.org/journals/sports-and-active-living/articles/10.3389/fspor.2024.1348983/full)
+- [Predicting goal probabilities with improved xG using event sequences (PMC, 2024)](https://pmc.ncbi.nlm.nih.gov/articles/PMC11524524/)
+- [A framework of interpretable match prediction with FIFA ratings and formation (PLOS ONE)](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0284318)
+- [The Betting Odds Rating System: using soccer forecasts to forecast soccer (PMC)](https://pmc.ncbi.nlm.nih.gov/articles/PMC5988281/)
+- [The Evolution of Football Betting: A Machine Learning Approach (arXiv, 2024)](https://arxiv.org/pdf/2403.16282)
+- [When Do Neural Nets Outperform Boosted Trees on Tabular Data? (arXiv/NeurIPS, 2023)](https://arxiv.org/abs/2305.02997)
+- [Can simple models predict football and beat the odds? Bundesliga (Sage, 2026)](https://journals.sagepub.com/doi/10.1177/22150218261416681)
+- [Predicting sport event outcomes using deep learning (PMC, 2025)](https://pmc.ncbi.nlm.nih.gov/articles/PMC12453701/)
