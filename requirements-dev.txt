@@ -1,0 +1,19 @@
+# Dev / tooling dependencies — not needed at production-pipeline runtime.
+# Install with: pip install -r requirements-dev.txt
+# (Runtime deps live in backend/requirements.txt.)
+
+-r backend/requirements.txt
+
+# Testing
+pytest>=7.4,<9
+pytest-cov>=4.1,<7
+hypothesis>=6.82,<7
+
+# Lint / type-check
+ruff>=0.1,<1
+mypy>=1.5,<2
+
+# Notebooks / dashboards (used by tools/dashboard.py, tools/profile_predict.py)
+streamlit>=1.30,<2
+plotly>=5.18,<7
+shap>=0.44,<1

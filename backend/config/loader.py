@@ -45,7 +45,10 @@ def _load_yaml(filename: str) -> dict:
     path = _CONFIG_DIR / filename
     with open(path, "r") as f:
         raw = yaml.safe_load(f)
-    return _resolve_env_vars(raw)
+    resolved = _resolve_env_vars(raw)
+    if "paths" in resolved:
+        resolved["paths"] = {k: str(_REPO_ROOT / v) for k, v in resolved["paths"].items()}
+    return resolved
 
 
 @lru_cache(maxsize=1)

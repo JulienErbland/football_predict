@@ -1,8 +1,8 @@
-# Environment
+# ── Environment ────────────────────────────────────────────────────────────
 .env
 .env.local
 
-# Python
+# ── Python ─────────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
@@ -13,32 +13,49 @@ build/
 .venv/
 venv/
 env/
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Data (raw and processed are excluded; output/json is included)
+# ── Data ───────────────────────────────────────────────────────────────────
+# Raw / processed / features / models live locally only.
 backend/data/raw/
 backend/data/processed/
 backend/data/features/
 backend/data/models/
 
-# Model binaries
+# Local backups kept for rollback safety, not source-of-truth.
+backend/data/_backup_*/
+*.backup
+predictions_before_*.json
+the-odds-api.json
+
+# Model binaries (any path)
 *.pkl
 *.joblib
 
-# But include predictions output JSON
+# But include curated prediction outputs that ship to the frontend.
 !backend/data/output/*.json
 !frontend/public/data/*.json
 
-# Node
+# ── Node / Next.js ─────────────────────────────────────────────────────────
 node_modules/
 .npm
-
-# Next.js
 frontend/.next/
 frontend/out/
 frontend/.vercel/
 
-# Misc
+# ── Smoke-test sandboxes (tools/pipeline_test.py default --sandbox-dir) ────
+tmp_smoke/
+tmp_ci_smoke/
+
+# ── IDE / editors ──────────────────────────────────────────────────────────
+.claude/
+.vscode/
+.idea/
+*.swp
+
+# ── Misc ───────────────────────────────────────────────────────────────────
 .DS_Store
 *.log
-.idea/
-.vscode/
+.vercel
