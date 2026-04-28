@@ -343,9 +343,26 @@ Path: `backend/data/models/holdout_snapshot.v1.json`.
 - `match_ids`: full list, sorted lexicographic ascending. Yes, this inflates
   the file (~1752 lines) — but it lets verification surface *which* matches
   drifted, not just "hash mismatch".
-- `match_ids_sha256`: SHA-256 of `",".join(sorted(match_ids))`, prefixed
-  with `sha256:` (the colon is a literal marker, future-proofing if we ever
-  swap algorithms).
+- `match_ids_sha256`: SHA-256 of the sort-disciplined join, prefixed with
+  `sha256:` (the colon is a literal marker, future-proofing if we ever
+  swap algorithms). Sort discipline below.
+
+### Sort discipline
+
+Match IDs are sorted **as strings**, regardless of underlying type:
+
+```python
+sorted_ids = sorted(str(mid) for mid in match_ids)
+hash_input = ",".join(sorted_ids)
+hash_value = "sha256:" + hashlib.sha256(hash_input.encode("utf-8")).hexdigest()
+```
+
+This is deterministic across pandas dtype changes (`int64` vs `string` vs
+`object`). The JSON file stores `match_ids` as strings to match this sort
+discipline — even if the parquet column is `int64`, the snapshot stringifies
+on write and the verifier stringifies before hashing on read. Without this,
+a future ingestion change that rewrites match_ids as native ints (or vice
+versa) would silently invalidate every existing snapshot hash.
 
 ### Behavior matrix
 
@@ -479,6 +496,29 @@ predictions. Order:
    serve — operators can override gates intentionally; the warning makes
    the override visible in logs.
 
+### Expected behavior on T2.1's first run
+
+T2.1's first training run **will exit non-zero** because the Phase 1
+baseline draw F1 (0.086) is below the `min_draw_f1` gate (0.25). This is
+expected and correct — Tier 1 is doing its job.
+
+The CI pipeline / commit-6's PR description must explicitly note this
+expected failure, along with the `verbose_breakdown()` output, so reviewers
+don't interpret the exit code as a T2.1 implementation bug.
+
+**Override path** — the meta-spec's §1.5 "documented and understood"
+override conditions are met:
+
+1. Failure cause documented (Phase 1's known catastrophic draw F1).
+2. Follow-up ticket already opened (T2.2 — draw-class handling).
+3. Justification recorded in `MODEL_REVIEW.md` (lands in T2.1's baseline
+   shift retrospective per §2 of this design).
+
+T2.1 ships *with the gate failure recorded* — not despite it, but because
+that recording is part of T2.1's purpose. The first green run of the
+pipeline arrives in T2.2, when SMOTE + class weights + threshold
+calibration push draw F1 across the 0.25 floor.
+
 ### Strict mode YAGNI
 
 T2.1 ships **no** `only=`, `strict=`, or other plumbing that T2.2 *might*
@@ -602,13 +642,23 @@ by Q1–Q7.
 - [ ] Matchday derivation regression tests added (2 tests).
 - [ ] Matchday parity script lands and runs clean.
 
-**Quality**:
+**Quality** (T2.1 ships the gate machinery, *not* a gate-passing model):
 
 - [ ] All existing tests stay green (current count: **21**, not 19).
 - [ ] Leakage gate (`tests/test_no_leakage.py`) passes after retraining.
 - [ ] Per-fold metrics within ±20% of CV-mean std (sanity floor).
-- [ ] Holdout 2024-25 metrics within "do no harm" floor:
-      `brier ≤ 0.22`, `rps ≤ 0.21`, `draw_f1 ≥ 0.25`.
+- [ ] Tier 1 / Tier 2 / Tier 3 gate wiring is functional and reports gate
+      state correctly. **The actual gate-pass status is informational for
+      T2.1**: T2.1 establishes the gate machinery, not the gate-passing
+      model. Draw F1 ≥ 0.25 is the **T2.2 target**, not a T2.1 acceptance
+      criterion.
+- [ ] Quality gate failure on `min_draw_f1` is *expected* in T2.1 (Phase 1
+      baseline is 0.086). T2.1's CI run intentionally exits non-zero on
+      this gate; the merge protocol's "documented and understood" override
+      conditions (meta-spec §1.5) apply.
+- [ ] Holdout 2024-25 "do no harm" floors on the *informational* metrics:
+      `brier ≤ 0.22`, `rps ≤ 0.21`. (Draw F1 explicitly excluded — see
+      above.)
 
 **Documentation**:
 
