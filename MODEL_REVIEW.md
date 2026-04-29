@@ -396,6 +396,129 @@ T2.3-T2.5 is to point at this section instead of debating the non-goal again.
 
 ---
 
+## 6.7 T2.1 Baseline Shift Retrospective
+
+T2.1 (walk-forward CV + locked holdout + quality gates) shipped on
+2026-04-29 across seven atomic commits on `phase2/t2.1-walk-forward-cv`.
+This section anchors the Phase 2 baseline and documents how the
+single-split Phase 1 metrics map onto T2.1's CV-mean + holdout pair.
+
+### Phase 1 → T2.1 metric shift
+
+| Metric    | Phase 1 (single-split) | T2.1 CV mean | T2.1 holdout |
+|-----------|------------------------|--------------|--------------|
+| RPS       | 0.2069                 | 0.2099       | 0.2079       |
+| Brier     | 0.2006                 | 0.2027       | 0.2019       |
+| Log loss  | 1.0872                 | 1.0584       | 1.0236       |
+| Accuracy  | 0.5171                 | 0.5031       | 0.5183       |
+| Draw F1   | 0.0860                 | 0.0392       | 0.0634       |
+
+Source: `backend/data/output/eval_ensemble.json` (commit 6's first run,
+re-confirmed after commit 7's snapshot verification path).
+
+### Component decomposition
+
+The shift is the sum of two effects (per design §2):
+
+- **Component A — methodology change.** Single-split → walk-forward CV
+  with locked holdout. Dominates RPS / Brier / Accuracy.
+- **Component B — `season_stage` recovered.** Was silently NaN→0 in
+  Phase 1 due to the matchday=0 bug; now varies in [0, 1] post-T2.1
+  commit 1. Expected small-but-non-zero contribution.
+
+Component decomposition is **not separately measured.** The combined
+shift on aggregate metrics is small (RPS +0.0030, Brier +0.0021) and
+within the per-fold std band (RPS std=0.0129 from commit 2's harness),
+so the decomposition is not load-bearing for T2.2's design. Re-running
+the old single-split path on corrected matchday data is parked as
+optional analysis — revisit if Phase 2 metric attributions become
+ambiguous.
+
+### Notable observations
+
+1. **Holdout draw_f1 (0.0634) > CV mean draw_f1 (0.0392).** The 2024-25
+   season may carry a slightly stronger draw-prediction signal than the
+   2021-2023 average. Worth re-examining after T2.2 lands SMOTE +
+   class-weight handling — if the gap inverts, current fold structure
+   is over-pessimistic on draws.
+
+2. **Holdout RPS (0.2079) < CV mean RPS (0.2099).** The model
+   generalises slightly better to a full 2024-25 holdout than to
+   within-CV mid-season slices. The (2, 9) folds validate at
+   matchdays 10-18 and 26-34 — both away from end-of-season run-ins,
+   which may be inherently more predictable. Difference is ~1×
+   per-fold std, so likely noise rather than signal.
+
+3. **Empirical (2, 9) chosen over the meta-spec's (3, 6) default.**
+   Commit 2's harness rejected (3, 6) on the mean-RPS sanity band —
+   its early-season-2021 fold trains on only 248 rows and produces
+   rps=0.33, dragging the (3, 6) mean to 0.2246 (outside the ±0.01
+   band of Phase 1's 0.2069). (2, 9)'s 9-matchday warmup avoids this.
+   Decision recorded in
+   `backend/data/output/cv_parametrization_validation.json`.
+
+4. **Production runtime matches the harness within 0.0003 RPS.**
+   Commit 2 predicted CV mean RPS = 0.2096; commit 6 measured 0.2099.
+   The same `train_calibrated_models()` helper is shared between
+   harness and runtime to keep them aligned — drift here would
+   silently invalidate the empirical rationale that locked (2, 9).
+
+### Implementation deviations from design
+
+Three structural deviations during implementation, all sound and
+documented in their respective commit messages:
+
+1. **`exceptions.py` shipped in commit 3** (design assigned commit 5).
+   `splits.py` needed `FootballPredictError` as a base; defining it
+   locally would have forced commit 5 to refactor it out. Splitting
+   class definition (commits 3 and 4) from policy wiring (commit 5)
+   keeps each commit self-contained.
+
+2. **`evaluation/cv.py` shipped in commit 6** (design assigned commit 3).
+   Fold orchestration is a training-time concern, not a splitter
+   primitive. cv.py's only consumer is train.py, which lands in commit
+   6 — putting cv.py with its consumer keeps the diff coherent.
+
+3. **Tier 1 wiring landed in commit 6** (design assigned commit 5).
+   Tier 1 (`cv_report.assert_gates()` in train.py) needs the cv_report
+   *instance* constructed in commit 6's orchestration. Commit 5 ships
+   only Tiers 2 (`test_quality_gates.py`) and 3 (`predict.py`), which
+   read the eval JSON from disk and don't depend on a live cv_report.
+
+### Forward references
+
+- **Phase 2 baseline locked**: CV mean RPS=0.2099, Brier=0.2027,
+  draw_f1=0.0392.
+- **All Phase 2 ticket improvements measured against this CV mean**
+  (per meta-spec §3 improvement classification).
+- **T2.2 target**: draw_f1 ≥ 0.25 on CV mean. Current gap: +0.21
+  improvement needed via SMOTE + class-weighted training + threshold
+  calibration.
+
+### Quality gate state at T2.1 close
+
+| Gate | Threshold | CV mean | Holdout | Status |
+|---|---|---|---|---|
+| max_rps | 0.21 | 0.2099 | 0.2079 | PASS |
+| max_brier | 0.22 | 0.2027 | 0.2019 | PASS |
+| min_draw_f1 | 0.25 | 0.0392 | 0.0634 | **FAIL** |
+
+The `min_draw_f1` failure is **intentional and expected** per design §6.
+T2.1 ships the gate machinery; T2.2 ships the gate-passing model. Per
+meta-spec §1.5 override conditions, the failure is recorded with:
+
+- **(a) Failure cause documented**: Phase 1's known catastrophic draw F1
+  (§0.3 of this document, plus §0.6 observation 2 about no draws
+  predicted across the holdout).
+- **(b) Follow-up ticket opened**: T2.2 — SMOTE + class weights +
+  threshold calibration.
+- **(c) Justification recorded**: this section.
+
+T2.1 is the gate-shipping ticket; T2.2 is the gate-passing ticket.
+First green training run arrives with T2.2.
+
+---
+
 ## 7. Sources
 
 - [A predictive analytics framework for soccer match outcome forecasting (ScienceDirect, 2024)](https://www.sciencedirect.com/science/article/pii/S2772662224001413)
