@@ -50,3 +50,14 @@ class QualityGateFailure(FootballPredictError):
             f"brier={g.holdout_brier:.4f}, draw_f1={g.holdout_draw_f1:.4f}"
         )
         return "\n".join(lines)
+
+
+class FeatureSchemaMismatch(FootballPredictError):
+    """`feature_schema_version` in an artifact differs from the current
+    code constant. Caller must retrain (predict.py refuses to serve)."""
+
+
+class HoldoutSnapshotMismatch(FootballPredictError):
+    """`holdout_snapshot.v1.json` hash doesn't match the current 2024
+    match_ids. Indicates ingestion drift; bootstrap a new snapshot or
+    investigate the symmetric-difference."""

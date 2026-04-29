@@ -99,6 +99,55 @@ def _load_historical_matches(cfg: dict) -> pd.DataFrame | None:
     return pd.read_parquet(path)
 
 
+def _enforce_serving_guards(cfg: dict) -> None:
+    """Tier 3 guards — runs once at predict() startup, before any inference.
+
+    1. Hard-fail if ``feature_schema_version`` in the most recent eval
+       artifact differs from the current code constant. Serving stale-
+       feature predictions is silently incorrect, so we refuse to start.
+    2. Warn if ``gates.passed is False``. Operators may override gates
+       intentionally (T2.2 follow-up); the WARN line keeps the override
+       visible in logs.
+
+    Skips quietly if ``eval_ensemble.json`` is missing or pre-T2.1
+    (no ``schema_version`` key) — first-run developer ergonomics.
+    """
+    from features.build import FEATURE_SCHEMA_VERSION
+    from evaluation.exceptions import FeatureSchemaMismatch
+
+    eval_path = Path(cfg["paths"]["output"]) / "eval_ensemble.json"
+    if not eval_path.exists():
+        logger.warning(f"No {eval_path.name} — skipping Tier 3 guards (first run?).")
+        return
+
+    with open(eval_path) as f:
+        report = json.load(f)
+    if "schema_version" not in report:
+        logger.warning(
+            f"{eval_path.name} predates cv_report.v1 — skipping Tier 3 guards. "
+            "Retrain to activate."
+        )
+        return
+
+    artifact_fsv = report.get("feature_schema_version")
+    if artifact_fsv != FEATURE_SCHEMA_VERSION:
+        raise FeatureSchemaMismatch(
+            f"Eval artifact feature_schema_version={artifact_fsv!r} "
+            f"differs from code constant {FEATURE_SCHEMA_VERSION!r}. "
+            "Retrain before serving."
+        )
+
+    gates = report.get("gates", {})
+    if gates.get("passed") is False:
+        from evaluation.cv_report import CVReport
+        cv_report = CVReport.from_json(json.dumps(report))
+        from evaluation.exceptions import QualityGateFailure
+        try:
+            cv_report.assert_gates()
+        except QualityGateFailure as e:
+            logger.warning(e.verbose_breakdown())
+
+
 def _build_upcoming_feature_index(
     upcoming_matches: list[pd.Series],
     historical_df: pd.DataFrame,
@@ -185,6 +234,7 @@ def predict(matchday: str = "next") -> dict:
 
     ensemble = _load_model(models_dir)
     feature_cols = _load_feature_cols(models_dir)
+    _enforce_serving_guards(cfg)
 
     historical_df = _load_historical_matches(cfg)
     client = FootballDataClient()
