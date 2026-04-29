@@ -46,11 +46,12 @@ from evaluation.cv_report import (
     CalibrationSection, CVReport, FoldMetrics, GatesSection, HoldoutSection,
     SCHEMA_VERSION,
 )
-from evaluation.exceptions import QualityGateFailure
+from evaluation.exceptions import HoldoutSnapshotMismatch, QualityGateFailure
 from evaluation.metrics import evaluate_predictions
 from evaluation.splits import WalkForwardSplit
 from features.build import FEATURE_SCHEMA_VERSION
 from models.ensemble import EnsembleModel
+from tools.bootstrap_holdout_snapshot import hash_match_ids
 
 
 _META_COLS = {
@@ -171,15 +172,38 @@ def _feature_importances(
     return dict(pairs[:50])
 
 
-def _load_holdout_snapshot_hash(models_dir: Path) -> str:
-    """Read the holdout snapshot hash, or return a placeholder if commit 7
-    hasn't seeded it yet."""
+def _verify_holdout_snapshot(models_dir: Path, holdout_df: pd.DataFrame) -> str:
+    """Verify the on-disk snapshot matches the live holdout match_ids.
+
+    Returns the snapshot hash on success. Raises HoldoutSnapshotMismatch
+    on drift, surfacing the symmetric difference so operators can debug
+    whether ingestion added/removed matches or the wrong season was
+    sampled.
+    """
     path = models_dir / "holdout_snapshot.v1.json"
     if not path.exists():
+        logger.warning(
+            f"{path.name} not found — proceeding without snapshot verification. "
+            "Run `python -m tools.bootstrap_holdout_snapshot` to seal."
+        )
         return "sha256:not-yet-sealed"
+
     with open(path) as f:
         snap = json.load(f)
-    return snap.get("match_ids_sha256", "sha256:not-yet-sealed")
+
+    snap_ids = set(snap.get("match_ids", []))
+    live_ids = set(str(mid) for mid in holdout_df["match_id"].tolist())
+    if snap_ids != live_ids:
+        only_snap = sorted(snap_ids - live_ids)[:5]
+        only_live = sorted(live_ids - snap_ids)[:5]
+        raise HoldoutSnapshotMismatch(
+            f"Holdout match_ids drifted from {path.name}. "
+            f"Snapshot hash={snap.get('match_ids_sha256')}, "
+            f"live hash={hash_match_ids(sorted(live_ids))}. "
+            f"In snapshot but not live (first 5): {only_snap}. "
+            f"In live but not snapshot (first 5): {only_live}."
+        )
+    return snap["match_ids_sha256"]
 
 
 def train(force_retrain: bool = False) -> EnsembleModel:
@@ -226,7 +250,7 @@ def train(force_retrain: bool = False) -> EnsembleModel:
     ).reset_index(drop=True)
 
     final_ensemble = _retrain_final(pool_df, feature_cols, mc)
-    snapshot_hash = _load_holdout_snapshot_hash(models_dir)
+    snapshot_hash = _verify_holdout_snapshot(models_dir, holdout_df)
     holdout_section = _evaluate_holdout(holdout_df, final_ensemble, feature_cols, snapshot_hash)
     logger.info(
         f"Holdout (n={holdout_section.n_test}): "
