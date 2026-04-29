@@ -22,7 +22,12 @@ htmlcov/
 backend/data/raw/
 backend/data/processed/
 backend/data/features/
-backend/data/models/
+backend/data/models/*
+backend/data/models/_backup/
+
+# But the locked-holdout snapshot is committed — it's the contract that
+# guarantees train.py and CV evaluate against the same fixed match set.
+!backend/data/models/holdout_snapshot.v1.json
 
 # Local backups kept for rollback safety, not source-of-truth.
 backend/data/_backup_*/

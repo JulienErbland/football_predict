@@ -22,6 +22,12 @@ from loguru import logger
 
 from config.loader import settings, feature_config
 from features.elo import compute_elo
+
+
+# Bumped to "2.0" with T2.1 — corrected matchday population fixes the
+# silently-zero `season_stage` feature. Bump on any change that alters
+# either the column set or the runtime semantics of an existing column.
+FEATURE_SCHEMA_VERSION = "2.0"
 from features.form import build_form_features, build_h2h_features
 from features.xg_features import build_xg_features
 from features.squad_features import build_squad_features
