@@ -11,7 +11,9 @@ Output schema (matches football_data.py exactly):
 
 Note: match_id is synthetic (hash of league+season+teams+date).
       home_team_id / away_team_id are synthetic (hash of team name).
-      matchday is left as 0 (not provided by this source).
+      matchday is derived per-(league, season) from chronological order
+      via :func:`derive_matchdays` — each team's k-th match is matchday k,
+      with row-wise max() resolving home/away desync under postponements.
 
 CLI usage (from backend/):
     python -m ingestion.football_data_csv --leagues PL,PD,BL1,SA,FL1 --seasons 2021,2022,2023,2024
@@ -25,6 +27,7 @@ import io
 import time
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import requests
 from loguru import logger
@@ -60,6 +63,44 @@ def _team_id(name: str) -> int:
 def _match_id(league: str, season: int, date: str, home: str, away: str) -> int:
     key = f"{league}_{season}_{date}_{home}_{away}"
     return int(hashlib.md5(key.encode()).hexdigest()[:8], 16)
+
+
+def derive_matchdays(df: pd.DataFrame) -> pd.DataFrame:
+    """Assign matchday per (league, season) from chronological order.
+
+    Algorithm: within each (league, season), each team's running match
+    count is computed in date order. A match's matchday is the max of
+    its home and away teams' counts. For a regular fixture both sides
+    are equal; under postponements they desync by ±1 and max() resolves.
+
+    The input is expected to have columns: league, season, date,
+    home_team_id, away_team_id. Returns a new DataFrame sorted by
+    (league, season, date) with an int `matchday` column added or
+    overwritten. Empty input returns an empty DataFrame unchanged.
+    """
+    if df.empty:
+        return df.copy()
+
+    df = df.sort_values(["league", "season", "date"]).reset_index(drop=True).copy()
+
+    work = df[["league", "season", "date", "home_team_id", "away_team_id"]].copy()
+    work["_row"] = work.index
+
+    home_long = work.rename(columns={"home_team_id": "team_id"})[
+        ["_row", "league", "season", "date", "team_id"]
+    ].assign(_side="H")
+    away_long = work.rename(columns={"away_team_id": "team_id"})[
+        ["_row", "league", "season", "date", "team_id"]
+    ].assign(_side="A")
+    long = pd.concat([home_long, away_long], ignore_index=True)
+    long = long.sort_values(["league", "season", "team_id", "date", "_row"])
+    long["_md"] = long.groupby(["league", "season", "team_id"]).cumcount() + 1
+
+    home_md = long.loc[long["_side"] == "H"].set_index("_row")["_md"].sort_index()
+    away_md = long.loc[long["_side"] == "A"].set_index("_row")["_md"].sort_index()
+
+    df["matchday"] = np.maximum(home_md.values, away_md.values).astype(int)
+    return df
 
 
 def fetch_matches_csv(league_code: str, season: int, raw_dir: Path) -> pd.DataFrame:
@@ -135,9 +176,11 @@ def fetch_matches_csv(league_code: str, season: int, raw_dir: Path) -> pd.DataFr
 
     df["date"] = pd.to_datetime(df["date"])
     df = normalize_columns(df)
+    df = derive_matchdays(df)
     out_path = raw_dir / f"{league_code}_{season}_matches.parquet"
     df.to_parquet(out_path, index=False)
-    logger.info(f"Saved {len(df)} matches → {out_path}")
+    logger.info(f"Saved {len(df)} matches → {out_path} "
+                f"(matchdays 1..{int(df['matchday'].max())})")
     return df
 
 
