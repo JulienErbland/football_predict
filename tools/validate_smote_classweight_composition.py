@@ -274,30 +274,44 @@ def run(
             f"mean.draw_f1={mean['draw_f1']:.3f} std.draw_f1={std['draw_f1']:.3f}"
         )
 
-    winner = _select_winner(cells_out)
+    # Build the report skeleton with cells_out captured BEFORE applying the
+    # margin filter, so a HarnessFailure preserves measurement evidence on
+    # disk instead of being lost to the traceback. Winner is filled in
+    # post-selection; on failure it stays null and failure_reason records
+    # why no cell was chosen.
+    report: dict = {
+        "schema_version": "smote_cw_ablation.v1",
+        "feature_schema_version": FEATURE_SCHEMA_VERSION,
+        "generated_at": started_at,
+        "smote_k_neighbors": smote_k_neighbors,
+        "folds_used": [int(s["fold_id"]) for s in fold_specs],
+        "cells": cells_out,
+        "winner": None,
+        "failure_reason": None,
+    }
+    try:
+        winner = _select_winner(cells_out)
+    except HarnessFailure as exc:
+        report["failure_reason"] = str(exc)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(json.dumps(report, indent=2))
+        logger.error(f"Wrote {output_path} (HarnessFailure — winner=null)")
+        raise
+
     logger.info(
         f"WINNING CELL: id={winner['cell_id']} smote={winner['smote_strategy']!r} "
         f"class_weight={winner['class_weight']} "
         f"mean.draw_f1={winner['mean']['draw_f1']:.3f}"
     )
-
-    report = {
-        "schema_version": "smote_cw_ablation.v1",
-        "feature_schema_version": FEATURE_SCHEMA_VERSION,  # "2.0" at this commit
-        "generated_at": started_at,
-        "smote_k_neighbors": smote_k_neighbors,
-        "folds_used": [int(s["fold_id"]) for s in fold_specs],
-        "cells": cells_out,
-        "winner": {
-            "cell_id": winner["cell_id"],
-            "smote_strategy": winner["smote_strategy"],
-            "class_weight": winner["class_weight"],
-            "rationale": (
-                f"Highest mean.draw_f1 ({winner['mean']['draw_f1']:.3f}) "
-                "among cells passing margin filter (rps <= 0.205, brier <= 0.215). "
-                f"std.draw_f1 = {winner['std']['draw_f1']:.3f}."
-            ),
-        },
+    report["winner"] = {
+        "cell_id": winner["cell_id"],
+        "smote_strategy": winner["smote_strategy"],
+        "class_weight": winner["class_weight"],
+        "rationale": (
+            f"Highest mean.draw_f1 ({winner['mean']['draw_f1']:.3f}) "
+            "among cells passing margin filter (rps <= 0.205, brier <= 0.215). "
+            f"std.draw_f1 = {winner['std']['draw_f1']:.3f}."
+        ),
     }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(report, indent=2))

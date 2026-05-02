@@ -61,6 +61,11 @@ def resample(
         n_home = int((y == 0).sum())
         target_draws = int(0.7 * n_home)
         n_draw_current = int((y == _DRAW_CLASS).sum())
+        # No-op guard: imblearn rejects target_count <= current_count, and we
+        # don't want to error in that case — early CV folds (small training
+        # sets) can already be draw-rich relative to the 0.7*n_home target.
+        # Callers comparing partial_70 against 'off' MUST log/inspect to know
+        # whether resample fired; identical metrics are evidence it did not.
         if target_draws <= n_draw_current:
             return X, y
         smote = SMOTE(
