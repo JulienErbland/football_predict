@@ -519,6 +519,118 @@ First green training run arrives with T2.2.
 
 ---
 
+## 6.8 T2.2 Three-Mechanism Ablation: Measured Negative Result and Path Forward
+
+T2.2 (SMOTE + class weights + calibrated draw threshold θ_D) was scoped on 2026-04-30 across 13 atomic commits on `phase2/t2.2-draw-class-handling`. Tasks 1–2 shipped (draw-handling primitives, ablation harness). Task 3 ran the harness on schema-2.0 features and produced a `HarnessFailure` — no SMOTE × class-weight cell cleared the margin filter (`mean.rps ≤ 0.205 AND mean.brier ≤ 0.215` across all 6 walk-forward folds). T2.2 did not ship the gate-passing model; this section documents what was measured, what the data implies about the design, and what a successor ticket would need to test.
+
+The single number to anchor on: **cross-fold `std.rps = 0.0102`** (from cell 2's fold-results, schema 2.0). Every margin gap below is reported in σ-units of this fold-to-fold variance — without that anchor, "0.0037 above margin" reads as either negligible or fatal depending on the reader. With it: 0.36σ.
+
+### Ablation methodology
+
+- **Harness:** `tools/validate_smote_classweight_composition.py`, mirroring T2.1's `validate_cv_parametrization.py` pattern.
+- **Grid:** 6 cells = {`off`, `partial_70`, `auto`} × {`(1.0, 1.0, 1.0)`, `(1.0, 2.5, 1.2)`}.
+- **Per-cell loop:** walk-forward CV (6 folds, locked at T2.1's `(n_splits=2, vw=9)` parametrization), SMOTE-resample on `(X_tr, y_tr)`, class-derived `sample_weight` into the same `train_calibrated_models()` path as production CV (no shortcuts; verified call-site equivalence pre-run).
+- **Decision rule (locked in design §2.2):** keep cells with `mean.rps ≤ 0.205 AND mean.brier ≤ 0.215`; pick `argmax(mean.draw_f1)`; tiebreak `argmin(std.draw_f1)`. No passing cell → `HarnessFailure`, no auto-tune fallback.
+- **Wall-clock:** 46s on the full 6×6. Design's 30–60 min runtime budget was ~100× too conservative; a one-fold smoke calibrated this pre-run.
+
+### 6×6 ablation result
+
+Source: `backend/data/output/smote_classweight_ablation.json` (`schema_version: smote_cw_ablation.v1`, `feature_schema_version: 2.0`, `winner: null`, `harness_failure_reason` populated).
+
+| Cell | SMOTE | Weights | mean.rps | mean.brier | mean.draw_f1 ± std | margin? |
+|---:|:--|:--|---:|---:|:---|:--|
+| 1 | off | (1.0, 1.0, 1.0) | 0.2099 | 0.2027 | 0.039 ± 0.031 | FAIL (rps + 0.0049 = 0.48σ) |
+| 2 | off | (1.0, 2.5, 1.2) | **0.2087** | **0.2022** | 0.092 ± 0.043 | FAIL (rps + 0.0037 = 0.36σ) |
+| 3 | partial_70 | (1.0, 1.0, 1.0) | 0.2101 | 0.2026 | 0.081 ± 0.050 | FAIL (rps + 0.0051 = 0.50σ) |
+| 4 | partial_70 | (1.0, 2.5, 1.2) | 0.2097 | 0.2028 | **0.110** ± 0.056 | FAIL (rps + 0.0047 = 0.46σ) |
+| 5 | auto | (1.0, 1.0, 1.0) | 0.2123 | 0.2056 | 0.099 ± 0.054 | FAIL (rps + 0.0073 = 0.72σ) |
+| 6 | auto | (1.0, 2.5, 1.2) | 0.2100 | 0.2033 | 0.105 ± 0.039 | FAIL (rps + 0.0050 = 0.49σ) |
+
+Cell 2 has the harness-best `mean.rps` (0.2087); cell 4 has the harness-best `mean.draw_f1` (0.110). They are different cells with different "best" metrics — the headline failure is on rps in every cell, not on draw_f1.
+
+Brier passes margin in all six cells (~0.012 of headroom on the worst cell). The bottleneck is rps.
+
+### Mechanism analysis
+
+1. **Class weights work, modestly.** Cells 1 vs 2 (`off`, weights toggled): `mean.rps` improves 0.2099 → 0.2087 (Δ = −0.0012, 0.12σ); `mean.draw_f1` improves 0.039 → 0.092 (+0.053 absolute, +136% relative). Weights are the only mechanism producing a measurable rps improvement — but the improvement is well within fold noise, and the resulting cell still fails margin.
+
+2. **SMOTE adds small marginal effect on draw_f1, no effect on RPS within fold noise.** Cells 2 vs 4 (`off` → `partial_70`, weighted): `mean.draw_f1` 0.092 → 0.110 (+0.018, +20% relative) — real on the discrete metric, defensible. `mean.rps` 0.2087 → 0.2097 (+0.001, 0.10σ — noise). `auto` SMOTE (cells 5–6) trades calibration for draw_f1 with the largest rps cost (cell 5 worst in class). The "three-pronged attack" framing of the design is empirically a "weights-led, SMOTE-marginal" framing.
+
+3. **`partial_70` no-ops on early CV folds.** The training sets in folds with thin season-2021 history already exceed the `0.7 × n_home` draw count, hitting the no-op guard in `draw_handling.resample()` (sharpened comment in commit `b5cb683`). Fold-0 evidence: cell 3 ≡ cell 1, cell 4 ≡ cell 2 to four decimals. The 6-fold mean diverges from this — `partial_70` does fire on later folds — but the cumulative effect is small (cells 1 vs 3, uniform weights: rps 0.2099 → 0.2101, draw_f1 0.039 → 0.081). Future ablations of partial-rate SMOTE should verify firing-rate per fold rather than relying on the 6-fold mean alone.
+
+4. **Some folds are not amenable to draw recovery regardless of mechanism.** Cell 2 fold-2 produces `draw_f1 = 0.018` (effectively no draws predicted), well below the cell mean of 0.092. Per-fold fluctuation includes folds where the training corpus offers no learnable draw signal — the mechanism choice is irrelevant on those folds. T2.2B's design should consider whether walk-forward fold construction is itself a confound, not just the loss/sampling layer.
+
+5. **The rps cluster is tight: 0.2087–0.2123 across all six cells, range 0.0036.** The margin filter draws a line at 0.205; the closest cell is 0.36σ above it. No combination of these three knobs moves rps below 0.205 — and crucially, the cells differ within roughly ±0.36σ of each other on rps, not "all the same RPS" but "all within fold noise of each other on RPS". Mechanisms here do not add to a meaningful rps reduction; they redistribute mass at the discrete classifier boundary without recalibrating the underlying probability distribution.
+
+### Schema-2.1 sanity probe
+
+T2.2's plan ordered SMOTE/weights ablation (Task 3) before adding three new draw-specific features (Task 8: `elo_diff_abs`, `h2h_draw_rate_last_5`, `defensive_match_indicator`). Path B of the meta-spec re-open conversation hypothesized that the Task 3 → Task 8 ordering masked a feature-driven rps improvement that would have closed the 0.0037 margin gap. A locked-pre-data decision rule was applied:
+
+- `cell-2 schema-2.1 mean.rps ≤ 0.205` → Path B (re-order plan, features before ablation).
+- `mean.rps ∈ (0.205, 0.207]` → ambiguous, Path A on discipline grounds.
+- `mean.rps > 0.207` → Path A (features don't close the gap).
+
+**Methodology.** Three new features added to the working tree (`backend/features/elo.py`, `form.py`, `context.py`); not committed. `backend/data/features/features.parquet` rebuilt at 7156 rows × 74 feature columns (vs schema-2.0's 71). Cell 2 (`off` + (1.0, 2.5, 1.2), the harness-best on rps) re-run on the full 6 folds via monkey-patched `_CELLS = [cell_2]` against the schema-2.1 parquet. Working tree reverted (`git checkout backend/features/{elo,form,context}.py`); parquet restored from a pre-experiment backup; clean state verified by re-loading the parquet and confirming the three new columns are absent.
+
+**Result.**
+
+| Metric | Schema 2.0 cell 2 | Schema 2.1 cell 2 | Δ |
+|---|---:|---:|---:|
+| `mean.rps` | 0.20872 | 0.20872 | +0.00002 |
+| `mean.brier` | 0.20217 | 0.20229 | +0.00012 |
+| `mean.draw_f1` | 0.092 | 0.109 | +0.017 (+18% rel.) |
+| `std.rps` (across 6 folds) | 0.01022 | 0.01086 | +0.0006 |
+
+Per-fold rps schema 2.1: `[0.2267, 0.2167, 0.2056, 0.2099, 0.1932, 0.2004]`.
+
+**Decision.** `0.20872 > 0.207` → Path A. Features close 0.00002 of the 0.0037 rps gap (0.5% of the gap, 0.002σ of fold noise). The result is decisively above the 0.207 threshold and triggers Path A as locked.
+
+**Interpretation.** The new features improve discrete classification at the argmax boundary (+18% relative draw_f1) but do not shift probability mass on this corpus. RPS measures the cumulative-distribution mismatch over ordered outcomes; Brier measures squared probability error. Neither moves when the underlying probability distribution is unchanged — and the new features evidently leave the distribution near-fixed while flipping a small number of borderline argmax decisions. One plausible cause: information overlap. `elo_diff_abs` is a deterministic transform of the existing `elo_difference`; `defensive_match_indicator` is a binary threshold of `home_w10_avg_ga` and `away_w10_avg_ga`, both already in the feature set; `h2h_draw_rate_last_5` is a count-window variant of the existing 5-year `h2h_draw_rate`. The boosted ensembles were extracting these signals implicitly via tree splits before the features were named.
+
+This probe is the load-bearing piece of evidence behind Path A. Without it, the retrospective could not honestly distinguish "the design's three mechanisms are insufficient" from "the design's three mechanisms are insufficient AND the planned Task 8 features would have closed the gap". With it, the second clause is empirically rejected on this corpus.
+
+### Why the three-mechanism design is empirically insufficient
+
+The design assumed three mechanisms acting in concert would lift `min_draw_f1` past 0.25 while keeping `max_rps ≤ 0.21` and `max_brier ≤ 0.22`. The data shows:
+
+1. The mechanisms do not jointly reduce rps below the 0.205 margin (best 0.2087, all six cells within ±0.36σ of each other).
+2. The mechanisms move discrete metrics (draw_f1) but not probability-calibration metrics (rps, brier) — they redistribute classifier decisions at boundaries, not probability mass.
+3. The new draw-specific features planned for Task 8 do not change this pattern; they amplify the discrete-vs-calibration split rather than closing it.
+
+The gate is rps-bounded; the mechanisms act on classification-decision space; the planned features act in the same space. Therefore the design's mechanisms cannot reach the gate, regardless of cell selection or task ordering.
+
+### Path forward
+
+T2.2 as designed does not ship. A successor ticket — to be scoped after a meta-spec amendment formalizes the redefinition of T2.2's Definition of Done — would need to test mechanisms that act on probability mass directly. Three candidates, framed as the questions they answer:
+
+- **Focal loss** — *Does down-weighting easy correctly-classified examples concentrate model gradient on hard / minority-class examples enough to recover draw signal in the probability distribution, not just at the argmax boundary?*
+- **Weighted Brier as the optimization target** (not just metric) — *Does directly optimizing the gate metric, rather than relying on log-loss as a proxy with class weights as a corrective, close the rps gap?*
+- **Ordinal regression** — *Is the structural fact that H/D/A is ordered (confusing H↔D is "less wrong" than confusing H↔A) the missing inductive bias? RPS rewards this ordering; current cross-entropy does not.*
+
+These are candidates, not commitments. The successor ticket's first question should be empirical-feasibility before mechanism selection; see methodology lessons below.
+
+T2.3 and beyond are unaffected and can proceed in parallel. T2.1's gate machinery remains intact; the holdout snapshot is sealed; the `min_draw_f1 ≥ 0.25` failure is recorded under §1.5 override conditions of the meta-spec (failure cause documented, follow-up work scoped via meta-spec amendment, justification recorded — this section).
+
+### Methodology lessons
+
+The retrospective owes one procedural observation. T2.2's brainstorm and 13-commit plan were locked before any empirical-feasibility probe. A single-cell smoke run on representative data — ~2 minutes of compute — would have surfaced the rps cluster around 0.21 and the 0.0037 gap to margin before 13 commits of plumbing were specced. This is generalizable beyond T2.2:
+
+> **Future Phase 2 (and beyond) brainstorms should include an empirical-feasibility probe — at minimum, a single-cell run on representative data — before locking a multi-commit plan.** The probe answers a Q1 of the form "is the achievable floor on the gate metric within reach of the planned mechanisms?" before any mechanism-selection or sequencing decisions are made.
+
+For the meta-spec amendment governing T2.2's successor ticket, the recommended Q1 is: *what is the achievable RPS floor on this corpus, and what mechanism class is required to reach it?* Mechanism scoping follows that answer; it does not lead it.
+
+### Quality gate state at T2.2 close
+
+| Gate | Threshold | T2.1 CV mean (carried forward) | T2.2 status |
+|---|---|---|---|
+| max_rps | 0.21 | 0.2099 | PASS (carried) |
+| max_brier | 0.22 | 0.2027 | PASS (carried) |
+| min_draw_f1 | 0.25 | 0.0392 | **FAIL (unchanged from T2.1)** |
+
+T2.2 ships ablation evidence and a measured negative result. The gate-passing ticket remains open; its scope is governed by the forthcoming meta-spec amendment.
+
+---
+
 ## 7. Sources
 
 - [A predictive analytics framework for soccer match outcome forecasting (ScienceDirect, 2024)](https://www.sciencedirect.com/science/article/pii/S2772662224001413)
