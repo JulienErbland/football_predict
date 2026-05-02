@@ -58,6 +58,7 @@ class LGBMModel(BaseModel):
         y_val = kwargs.get("y_val")
         feature_names = kwargs.get("feature_names")
         early_stopping_rounds = kwargs.get("early_stopping_rounds", 50)
+        sample_weight = kwargs.get("sample_weight")
 
         self._model = lgb.LGBMClassifier(**self._params)
         callbacks = []
@@ -68,6 +69,8 @@ class LGBMModel(BaseModel):
             callbacks.append(lgb.early_stopping(early_stopping_rounds, verbose=False))
             callbacks.append(lgb.log_evaluation(period=-1))
             fit_kwargs["callbacks"] = callbacks
+        if sample_weight is not None:
+            fit_kwargs["sample_weight"] = sample_weight
 
         self._model.fit(X, y, **fit_kwargs)
         self.feature_importances_ = self._model.feature_importances_
