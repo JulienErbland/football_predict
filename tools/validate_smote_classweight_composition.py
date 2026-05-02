@@ -277,8 +277,8 @@ def run(
     # Build the report skeleton with cells_out captured BEFORE applying the
     # margin filter, so a HarnessFailure preserves measurement evidence on
     # disk instead of being lost to the traceback. Winner is filled in
-    # post-selection; on failure it stays null and failure_reason records
-    # why no cell was chosen.
+    # post-selection; on failure it stays null and harness_failure_reason
+    # records the margin-filter rule that no cell satisfied.
     report: dict = {
         "schema_version": "smote_cw_ablation.v1",
         "feature_schema_version": FEATURE_SCHEMA_VERSION,
@@ -287,12 +287,12 @@ def run(
         "folds_used": [int(s["fold_id"]) for s in fold_specs],
         "cells": cells_out,
         "winner": None,
-        "failure_reason": None,
+        "harness_failure_reason": None,
     }
     try:
         winner = _select_winner(cells_out)
     except HarnessFailure as exc:
-        report["failure_reason"] = str(exc)
+        report["harness_failure_reason"] = str(exc)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(json.dumps(report, indent=2))
         logger.error(f"Wrote {output_path} (HarnessFailure — winner=null)")
