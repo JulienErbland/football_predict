@@ -1,7 +1,7 @@
 # Phase 2 — Meta-Spec
 
-**Status**: Approved design — implementation tickets begin in fresh sessions.
-**Author**: Brainstorm session, 2026-04-27.
+**Status**: Approved design (amended 2026-05-04 — T2.2 closure; see §1.6).
+**Author**: Brainstorm session, 2026-04-27. Amendment 2026-05-04.
 **Scope**: Sequencing, shared interfaces, measurement protocol, and quality
 gates that govern every Phase 2 ticket (T2.1 – T2.6). Per-ticket detailed specs
 live in their own brainstorm cycles.
@@ -19,15 +19,17 @@ accuracy 0.5171 on the 2024 holdout (single-split, post-T0.1d).
 |--------|-------|-------|
 | T2.6 | Phase 2 non-goals doc | **Lands FIRST**, ahead of T2.1 — prevents scope creep proactively rather than retrospectively. Already shipped as commit `010a711`. |
 | T2.1 | Walk-forward CV + locked holdout + quality gates | Foundation. Every later ticket measures itself against the surfaces this ticket builds. |
-| T2.2 | Draw-class handling | SMOTE + class weights + threshold calibration + 3 new draw features. T2.2 strict mode active. |
+| T2.2 | Draw-class handling | Closed as ablation evidence (PR #2, 2026-05-02). Three-mechanism design superseded; see §1.6 and `MODEL_REVIEW.md §6.8`. |
 | T2.3 | Pi-ratings alongside Elo | New feature builder. Bumps `feature_schema_version`. |
 | T2.4 | CatBoost base model | Third tree model. Native categorical handling. |
 | T2.5 | Stacking meta-learner | Rewrites the broken `StackingEnsemble` scaffold + adds `oof_generator`. |
 
 ### Sequencing
 
-**Strict-sequential**: T2.6 ✅ → T2.1 → T2.2 → T2.3 → T2.4 → T2.5.
-Each ticket branches off `main` after the previous has merged.
+**Strict-sequential through T2.2 closure**: T2.6 ✅ → T2.1 ✅ → T2.2 ✅
+(closed as ablation; see §1.6) → T2.3 → T2.4 → T2.5. T2.3/T2.4/T2.5
+sequencing unchanged; the draw-handling question does not gate them.
+Each remaining ticket branches off `main` after the previous has merged.
 
 Solo-dev rationale: parallelism gains are theoretical when there is one
 implementer; sequential keeps deltas attributable per ticket and lets the
@@ -40,8 +42,6 @@ leakage gate run end-to-end after every retraining.
 3. Leakage gate (`tests/test_no_leakage.py`) passes after every retraining.
 4. Quality-gates test (Tier 2 from §3) stays green at HEAD.
 5. Atomic commit set per ticket — mirrors the 7-commit Phase 1 closure pattern.
-6. T2.2 specifically: `train.py` strict-mode active — refuses to write artifacts
-   until folded Draw F1 ≥ 0.25.
 
 ### Quality gate failure protocol
 
@@ -50,8 +50,25 @@ leakage gate run end-to-end after every retraining.
   1. Failure is documented and understood (not mysterious).
   2. Follow-up ticket explicitly opened to address it.
   3. Justification recorded in `MODEL_REVIEW.md`.
-- **T2.2 special strict mode**: `train.py` won't write artifacts at all if
-  Draw F1 < 0.25 — forces tight iteration before ship.
+
+### T2.2 closure status (amendment 2026-05-04)
+
+T2.2 was attempted between 2026-04-30 and 2026-05-02 against the original
+13-commit design (`docs/superpowers/plans/superseded/2026-04-30-t2_2-draw-class-handling.md`).
+The first three tasks shipped (draw-handling primitives, ablation harness,
+6×6 evidence run); the harness produced `HarnessFailure` (no SMOTE × class-weight
+cell within margin filter on the full 6 walk-forward folds). A schema-2.1
+sanity probe established that the planned new features moved RPS by 0.00002
+(within float-rounding noise on the gate metric). Tasks 4–13 of the original
+plan did not execute, per the locked decision rule applied to the schema-2.1
+sanity probe (RPS > 0.207 → Path A). Ablation evidence and retrospective
+merged 2026-05-02 (PR #2).
+
+The `min_draw_f1 ≥ 0.25` gate is reclassified per §6 of this amendment to
+diagnostic-only (also see §3). Any successor draw-handling work would live
+in Phase 3+, contingent on Phase 2 closure surfacing new evidence and a
+successor scope being justified by feasibility-probe-first methodology. Full
+retrospective: `MODEL_REVIEW.md §6.8`.
 
 ### Phase 4 prep — deferred
 
@@ -141,7 +158,7 @@ well-tested code instead of 30–40. Morning of work.
 
 - `max_rps`: 0.21
 - `max_brier`: 0.22
-- `min_draw_f1`: 0.25 (T2.2 hard gate)
+- `min_draw_f1`: 0.25 (diagnostic-only post-amendment 2026-05-04 — see §1.6 and "Diagnostic-only treatment" below)
 
 ### Tier 1 — `train.py` exit gate (primary defense)
 
@@ -166,11 +183,23 @@ well-tested code instead of 30–40. Morning of work.
 - Does NOT block predictions (would be too disruptive at deploy time).
 - Logs prominently for monitoring; optional alerting hook for Phase 6+.
 
-### T2.2 strict mode (special case)
+### Diagnostic-only treatment of `min_draw_f1` (amendment 2026-05-04)
 
-- Draw F1 gate fails BEFORE artifact save.
-- Forces iteration on SMOTE / class weights / threshold tuning before any
-  model can be persisted.
+The `min_draw_f1 ≥ 0.25` gate is reclassified to diagnostic-only post-T2.2
+closure (see §1.6 and `MODEL_REVIEW.md §6.8`).
+
+- **Tier 1**: reports the actual `draw_f1` value alongside `max_rps` /
+  `max_brier`, but does NOT `sys.exit(1)` if only `min_draw_f1` fails.
+  Tier 1 exit is gated on `max_rps` and `max_brier` only.
+- **Tier 2**: keeps the threshold present in `TrainingConfig` and visible
+  in `CVReport.gates` for regression detection, but skips the `min_draw_f1`
+  assertion (with inline comment citing §6.8).
+- **Tier 3**: unchanged — warning-only.
+- **Re-promotion to merge-blocking requires meta-spec amendment.**
+
+Implementation of these Tier 1 / Tier 2 changes is out of scope for this
+amendment (which is meta-spec only); the change is owned by the next ticket
+that retrains the model under the post-T2.2 baseline.
 
 ---
 
@@ -203,7 +232,7 @@ backend/models/train.py          # MODIFIED — replaces single-split with walk-
 
 | Ticket | New files | Modified files | Why |
 |--------|-----------|----------------|-----|
-| T2.2 | `backend/training/draw_handling.py` (SMOTE wrapper, threshold cal) | `train.py`, `features/context.py` (3 new draw features), `model_config.yaml` (class weights) | Three-pronged draw attack |
+| T2.2 | `backend/training/draw_handling.py` (skeleton: `resample`, `class_sample_weights`); `backend/tools/validate_smote_classweight_composition.py` (6×6 ablation harness); `backend/data/output/smote_classweight_ablation.json` (evidence JSON) | `requirements.txt` (`imbalanced-learn`); model `fit()` signatures (`sample_weight` plumbing) | Ablation evidence; design superseded — see §1.6 |
 | T2.3 | `backend/features/pi_ratings.py` | `features/build.py` (register), `feature_config.yaml` (toggle) | New feature builder |
 | T2.4 | `backend/models/catboost_model.py` | `models/train.py` (register), `model_config.yaml` (config block) | New base model |
 | T2.5 | `backend/training/oof_generator.py` — `generate_oof(model_factories, X, y, splitter) → oof_df`. Orchestrates OOF prediction generation across CV folds; reuses `WalkForwardSplit` from T2.1. | `backend/models/train.py` — adds stacking branch:<br>`if config.ensemble.method == 'stacking':`<br>`  oof = generate_oof(...)`<br>`  meta = LogisticRegression().fit(oof, y)`<br>`  base_models = [f().fit(X, y) for f in factories]`<br>`  model = StackingEnsemble(base_models, meta)` | `backend/models/ensemble.py::StackingEnsemble` — **inference-time only**. Holds `{base_models, meta_learner}`. `predict_proba()`: base preds → meta preds. **No training logic.** |
@@ -283,8 +312,8 @@ FEATURE_SCHEMA_VERSION = "2.0"  # Phase 1 baseline. Bumped per ticket below.
 | Phase 2 ticket | Bumps version to | What changed |
 |----------------|------------------|--------------|
 | T2.1 | (no bump) | CV change is training-only, feature set unchanged |
-| T2.2 | `"2.1"` | Adds 3 draw features to `features/context.py` |
-| T2.3 | `"2.2"` | Adds 4–5 pi-rating features |
+| T2.2 | (no bump — closed before feature-add commit; see §1.6) | Three planned features did not land |
+| T2.3 | `"2.1"` | Adds 4–5 pi-rating features (cadence shifted post-T2.2 closure: was `"2.2"`) |
 | T2.4 | (no bump) | New base model, no new features |
 | T2.5 | (no bump) | Ensemble change only |
 
@@ -550,23 +579,19 @@ hygiene.
 ### Phase 2 Definition of Done
 
 - [x] **T2.6 ✅ committed** — `010a711` (`docs(t2.6): document Phase 2 non-goals`)
-- [ ] **T2.1**:
-  - [ ] `WalkForwardSplit` produces 9 folds (3 seasons × 3 splits, matchday
-        breakpoints `[14, 22, 30]`, val window 6)
-  - [ ] `CVReport` schema (`cv_report.v1`) lands as documented in §5
-  - [ ] Holdout snapshot file `backend/data/models/holdout_snapshot.json` committed
-  - [ ] `feature_schema_version = "2.0"` constant lives in `backend/features/build.py`
-  - [ ] Tier 1 gate active in `train.py` (`sys.exit(1)` on breach)
-  - [ ] Tier 2 gate test `tests/test_quality_gates.py` lands
-  - [ ] Tier 3 warning hook in `predict.py`
-  - [ ] All 19 existing tests still green; leakage gate still passes
-- [ ] **T2.2**:
-  - [ ] Folded Draw F1 ≥ 0.25 (HARD gate, blocks merge per §1)
-  - [ ] T2.2 strict mode active: `train.py` refuses to write artifacts if Draw F1 < 0.25
-  - [ ] 3 draw features added; `feature_schema_version` bumped to `"2.1"`
-  - [ ] Class weights + threshold cal stored in model artifact
+- [x] **T2.1**:
+  - [x] `WalkForwardSplit` produces 9 folds (3 seasons × 3 splits, matchday
+        breakpoints `[14, 22, 30]`, val window 6) *(see `MODEL_REVIEW.md §6.7` for parametrization deviation)*
+  - [x] `CVReport` schema (`cv_report.v1`) lands as documented in §5
+  - [x] Holdout snapshot file `backend/data/models/holdout_snapshot.json` committed
+  - [x] `feature_schema_version = "2.0"` constant lives in `backend/features/build.py`
+  - [x] Tier 1 gate active in `train.py` (`sys.exit(1)` on breach)
+  - [x] Tier 2 gate test `tests/test_quality_gates.py` lands
+  - [x] Tier 3 warning hook in `predict.py`
+  - [x] All 19 existing tests still green; leakage gate still passes
+- [x] **T2.2**: Closed as ablation evidence (PR #2, merged 2026-05-02). Original three-mechanism design superseded; see §1.6 and `MODEL_REVIEW.md §6.8` for the load-bearing retrospective. The `min_draw_f1 ≥ 0.25` gate is reclassified to diagnostic-only (see §3). Re-promotion to merge-blocking requires meta-spec amendment.
 - [ ] **T2.3**:
-  - [ ] Pi-rating features added; `feature_schema_version` bumped to `"2.2"`
+  - [ ] Pi-rating features added; `feature_schema_version` bumped to `"2.1"` (cadence shifted post-T2.2 closure; see §1.6)
   - [ ] Folded RPS satisfies §2's "real or ambiguous" improvement classification
         (regression blocks merge per §1 quality gate protocol)
   - [ ] **SHAP shows pi-rating features collectively account for ≥ 5% of total
@@ -613,9 +638,22 @@ hygiene.
 | Status | Commit | Subject |
 |--------|--------|---------|
 | ✅ DONE | `010a711` | `docs(t2.6): document Phase 2 non-goals` |
-| pending | (T2.1) | `feat(t2.1): walk-forward CV + locked holdout + quality gates` |
-| pending | (T2.1) | `chore(t2.1): commit holdout snapshot artifact` *(separate so the JSON has its own rollbackable commit)* |
-| pending | (T2.2) | `feat(t2.2): draw-class handling` |
+| ✅ DONE | `c4dc674` | `fix(ingestion): derive matchday from date order` |
+| ✅ DONE | `168786b` | `feat(t2.1): empirical CV parametrization harness` |
+| ✅ DONE | `69b3356` | `feat(t2.1): WalkForwardSplit + matchday validators` |
+| ✅ DONE | `d78c261` | `feat(t2.1): CVReport schema (cv_report.v1)` |
+| ✅ DONE | `7774bc9` | `feat(t2.1): exceptions + Tier 2/3 quality gates` |
+| ✅ DONE | `b845e7c` | `feat(t2.1): wire walk-forward CV into train.py` |
+| ✅ DONE | `ce7b739` | `chore(t2.1): seed holdout snapshot` |
+| ✅ DONE | `048759f` | `docs(t2.1): baseline shift retrospective` |
+| ✅ DONE | `446b7c6` | `docs(t2.2): draw-class handling design` |
+| ✅ DONE | `ff25e56` | `feat(t2.2): add imbalanced-learn + draw_handling.py skeleton` |
+| ✅ DONE | `2845e5f` | `feat(t2.2): SMOTE+class_weight ablation harness + sample_weight plumbing` |
+| ✅ DONE | `b5cb683` | `fix(t2.2): persist ablation evidence JSON on HarnessFailure` |
+| ✅ DONE | `15078e3` | `fix(t2.2): rename failure_reason -> harness_failure_reason in evidence JSON` |
+| ✅ DONE | `37ae2b0` | `chore(t2.2a): land 6x6 ablation evidence JSON (HarnessFailure)` |
+| ✅ DONE | `44ba448` | `docs(t2.2): three-mechanism ablation retrospective and path forward` |
+| ✅ DONE | `29fb556` | `docs(t2.2): supersede T2.2 implementation plan; move to plans/superseded/` |
 | pending | (T2.3) | `feat(t2.3): pi-ratings alongside Elo` |
 | pending | (T2.4) | `feat(t2.4): CatBoost base model` |
 | pending | (T2.5) | `feat(t2.5): stacking meta-learner` |
