@@ -1,9 +1,4 @@
 models:
-  poisson:
-    enabled: false   # Trained standalone but excluded from ensemble (different predict_proba interface)
-    weight: 0.25
-    # Dixon-Coles Poisson regression — strong baseline, especially in low-data regimes
-
   xgboost:
     enabled: true
     weight: 0.60
@@ -25,15 +20,6 @@ models:
     learning_rate: 0.05
     num_leaves: 63
     feature_fraction: 0.8
-
-  neural_net:
-    enabled: false          # Only activate when dataset > 2000 matches
-    weight: 0.10
-    hidden_sizes: [256, 128, 64]
-    dropout: 0.3
-    epochs: 100
-    batch_size: 64
-    learning_rate: 0.001
 
 ensemble:
   method: weighted_average  # or "stacking" for logistic meta-learner on OOF preds

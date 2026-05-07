@@ -13,7 +13,7 @@ hypothesis>=6.82,<7
 ruff>=0.1,<1
 mypy>=1.5,<2
 
-# Notebooks / dashboards (used by tools/dashboard.py, tools/profile_predict.py)
+# Notebooks / dashboards (used by tools/dashboard.py)
 streamlit>=1.30,<2
 plotly>=5.18,<7
 shap>=0.44,<1
